@@ -18,3 +18,10 @@ Dev install
 	pip install -r requirements.txt
 	cd ../iotlab-injectors/
 	pip install -e .
+
+
+Testing it works
+----------------
+
+	pip install pytest
+	pytest -v
