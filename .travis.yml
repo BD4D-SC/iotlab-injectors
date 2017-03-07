@@ -1,5 +1,12 @@
 language: python
 
+services: docker
+sudo: required
+
+before_install:
+  - git clone https://github.com/iot-lab/meshblu.git
+  - meshblu/install.sh docker-compose meshblu start
+
 install:
   - pip install -r requirements.txt
   - pip install .
