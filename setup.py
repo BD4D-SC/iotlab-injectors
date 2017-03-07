@@ -15,6 +15,11 @@ setup(
     license        = "=== TBD ===",
     packages       = find_packages("src"),
     package_dir    = {"": "src"},
+    entry_points   = {
+        "console_scripts": [
+            "injectors = "+PACKAGE+".main:main",
+        ],
+    },
     namespace_packages = [PACKAGE],
 
     install_requires = [
