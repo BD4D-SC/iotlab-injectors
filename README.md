@@ -1,8 +1,12 @@
-This is the IoT-LAB injectors repository
+The IoT-LAB injectors
+=====================
 
 
 Install
 -------
+
+	git clone git@github.com:iot-lab/iotlab-injectors.git
+	cd iotlab-injectors
 
 	mkvirtualenv embers
 	pip install -r requirements.txt
