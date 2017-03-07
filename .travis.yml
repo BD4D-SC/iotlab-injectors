@@ -13,5 +13,4 @@ install:
   - pip install .
 
 script:
-  - injectors -h
   - py.test -v
