@@ -13,13 +13,13 @@ def main():
 
 
 @command
-def run(nb_devices, dataset, protocol, ev_per_hour, **_):
+def run(nb_devices, dataset, protocol, ev_per_hour, duration, **_):
     """ run <nb> injectors on local node """
 
     print("running {nb} '{}+{}' injector{s} on local node".format(
           dataset, protocol, nb=nb_devices, s=s(nb_devices)))
-    print("sending {} event{s}/h (per injector)".format(
-          ev_per_hour, s=s(ev_per_hour)))
+    print("sending {} event{s}/h (per injector) for {} min.".format(
+          ev_per_hour, duration, s=s(ev_per_hour)))
     pass
 
 

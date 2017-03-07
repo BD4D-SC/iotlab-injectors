@@ -6,6 +6,7 @@ DEFAULTS = {
     "protocol": "http",
     "nb_devices": 1,
     "ev_per_hour": 360,
+    "duration": 1,
     "broker": "127.0.0.1",
 }
 
@@ -37,6 +38,11 @@ def add_params(parser):
         "--ev-per-hour", type=int,
         metavar="<int>",
         help="number of events per hour      [%(default)s]")
+
+    parser.add_argument(
+        "--duration", type=int,
+        metavar="<min>",
+        help="number of minutes to run for   [%(default)s]")
 
     parser.add_argument(
         "--broker",
