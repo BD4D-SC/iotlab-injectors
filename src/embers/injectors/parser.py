@@ -16,12 +16,14 @@ DATASETS = "parking traffic pollution"
 
 
 def create_parser():
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(add_help=False)
 
     add_commands(parser)
     add_params(parser)
     add_datasets(parser)
     add_protocols(parser)
+
+    add_hidden_help(parser)
 
     parser.set_defaults(**DEFAULTS)
 
@@ -64,6 +66,12 @@ def add_datasets(parser):
         "--dataset",
         choices=choice.split(),
         help="send events using specified dataset  [%(default)s]")
+
+
+def add_hidden_help(parser):
+    parser.add_argument(
+        "-h", "--help", action="help",
+        help=argparse.SUPPRESS)
 
 
 def add_commands(parser):
