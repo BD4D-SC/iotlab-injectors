@@ -5,7 +5,8 @@ sudo: required
 
 before_install:
   - git clone https://github.com/iot-lab/meshblu.git
-  - meshblu/install.sh docker-compose meshblu start
+  - meshblu/install.sh docker-compose meshblu
+  - meshblu/install.sh start && rm -rf meshblu
 
 install:
   - pip install -r requirements.txt
