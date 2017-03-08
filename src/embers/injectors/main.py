@@ -7,7 +7,7 @@ def main():
 
     if opts.command:
         args = opts.__dict__
-        command.func[opts.command](**args)
+        return command.func[opts.command](**args)
     else:
         parser.print_usage()
 
@@ -46,4 +46,6 @@ def s(nb):
 
 
 if __name__ == "__main__":
-    main()
+    _ = main()
+    import sys
+    sys.exit(_)
