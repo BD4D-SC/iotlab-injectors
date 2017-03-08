@@ -1,4 +1,5 @@
 from parser import command, create_parser
+from registry import register_gateway
 
 
 def main():
@@ -38,7 +39,9 @@ def register_gw(dataset, broker, **_):
 
     print("registering '{}' gateway on {}".format(
           dataset, broker))
-    pass
+    if register_gateway(dataset) is False:
+        print("gateway '{}' already registered".format(dataset))
+        return 1
 
 
 def s(nb):
