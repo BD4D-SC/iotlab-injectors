@@ -44,6 +44,13 @@ def register_gw(dataset, broker, **_):
         return 1
 
 
+@command
+def init_config(broker, **_):
+    """ initialize config.py (root_auth) """
+    import config
+    config.init_config(broker)
+
+
 def s(nb):
     return "s" if nb != 1 else ""
 
