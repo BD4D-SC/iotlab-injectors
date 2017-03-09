@@ -1,4 +1,5 @@
 from parser import command, create_parser
+from registry import register_gateway
 
 
 def main():
@@ -7,7 +8,7 @@ def main():
 
     if opts.command:
         args = opts.__dict__
-        command.func[opts.command](**args)
+        return command.func[opts.command](**args)
     else:
         parser.print_usage()
 
@@ -38,7 +39,16 @@ def register_gw(dataset, broker, **_):
 
     print("registering '{}' gateway on {}".format(
           dataset, broker))
-    pass
+    if register_gateway(dataset) is False:
+        print("gateway '{}' already registered".format(dataset))
+        return 1
+
+
+@command
+def init_config(broker, **_):
+    """ initialize config.py (root_auth) """
+    import config
+    config.init_config(broker)
 
 
 def s(nb):
@@ -46,4 +56,6 @@ def s(nb):
 
 
 if __name__ == "__main__":
-    main()
+    _ = main()
+    import sys
+    sys.exit(_)
