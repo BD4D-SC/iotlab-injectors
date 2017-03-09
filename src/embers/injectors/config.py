@@ -6,8 +6,8 @@ CONFIG_FILE = "config.py"
 class config: pass  # namespace
 
 
-def get_config():
-    if not hasattr(get_config, "config_loaded"):
+def get_config(force_reload=False):
+    if force_reload or not hasattr(get_config, "config_loaded"):
         execfile(CONFIG_FILE, config.__dict__)
         get_config.config_loaded = True
     assert config.broker_address
