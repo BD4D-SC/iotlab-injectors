@@ -23,8 +23,7 @@ def get_broker_api(auth=None):
 
 
 def init_config(broker_address):
-    no_auth = ()
-    api = get_broker_api(no_auth)
+    api = http.Client(broker_address)
     reg = api.register_device({"type":"root_auth"})
 
     root_auth = ( reg['uuid'], reg['token'] )
