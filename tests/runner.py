@@ -1,4 +1,5 @@
 import subprocess
+import pytest
 
 
 def run(cmd):
@@ -6,4 +7,5 @@ def run(cmd):
     try:
         return subprocess.check_output(cmd)
     except Exception as e:
+        print(e.output)
         pytest.fail(e)
