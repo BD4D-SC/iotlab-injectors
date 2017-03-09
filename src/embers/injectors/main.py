@@ -7,8 +7,7 @@ def main():
     opts = parser.parse_args()
 
     if opts.command:
-        args = opts.__dict__
-        return command.func[opts.command](**args)
+        return command.run(opts)
     else:
         parser.print_usage()
 

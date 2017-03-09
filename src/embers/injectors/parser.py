@@ -89,5 +89,12 @@ def command(f):
     """ decorator to define parser commands """
     command.func[f.__name__.replace("_", "-")] = f
 
+
+def run_command(opts):
+    args = opts.__dict__
+    return command.func[opts.command](**args)
+
+
 import collections
 command.func = collections.OrderedDict()
+command.run = run_command
