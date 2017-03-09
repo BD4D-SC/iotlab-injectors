@@ -22,6 +22,19 @@ def test_injectors_init_config_with_broker():
     assert config.broker_address == "localhost"
 
 
+def test_injectors_register_gw_no_args():
+    run("injectors --register-gw")
+
+
+def test_injectors_register_gw_already_registered():
+    with pytest.raises(Exception):
+        run("injectors --register-gw")
+
+
+def test_injectors_register_gw_with_dataset():
+    run("injectors --register-gw --dataset traffic")
+
+
 def test_injectors_run_defaults():
     run("injectors --run")
 
@@ -34,16 +47,3 @@ def test_injectors_run_protocol(protocol):
 
 def test_injectors_run_many_parking():
     run("injectors --run --nb-devices 50 --dataset parking")
-
-
-def test_injectors_register_gw_no_args():
-    run("injectors --register-gw")
-
-
-def test_injectors_register_gw_already_registered():
-    with pytest.raises(Exception):
-        run("injectors --register-gw")
-
-
-def test_injectors_register_gw_with_dataset():
-    run("injectors --register-gw --dataset traffic")
