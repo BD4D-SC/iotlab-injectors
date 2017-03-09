@@ -34,3 +34,16 @@ def test_injectors_run_protocol(protocol):
 
 def test_injectors_run_many_parking():
     run("injectors --run --nb-devices 50 --dataset parking")
+
+
+def test_injectors_register_gw_no_args():
+    run("injectors --register-gw")
+
+
+def test_injectors_register_gw_already_registered():
+    with pytest.raises(Exception):
+        run("injectors --register-gw")
+
+
+def test_injectors_register_gw_with_dataset():
+    run("injectors --register-gw --dataset traffic")
