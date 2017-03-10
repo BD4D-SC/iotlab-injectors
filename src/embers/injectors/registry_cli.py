@@ -51,9 +51,7 @@ def unregister(uuid, **_):
         return 1
 
     api = config.get_broker_api()
-    reg = api.reset_token(uuid)
-    auth = (reg["uuid"], reg["token"])
-    ret = api.unregister_device(auth)
+    ret = api.unregister_device(uuid)
 
 
 def add_parameters(parser):
