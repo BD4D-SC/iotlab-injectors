@@ -32,8 +32,7 @@ def register(gateway, device, **_):
         return 1
 
     if device:
-        metadata = registry.DeviceMetadata(gateway)
-        ret = config.get_broker_api().register_device(metadata)
+        ret = registry.register_device(dataset=gateway)
     else:
         ret = registry.register_gateway(dataset=gateway)
         if not ret:

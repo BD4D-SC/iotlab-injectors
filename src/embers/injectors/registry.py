@@ -19,3 +19,9 @@ def register_gateway(dataset):
         return False
     else:
         return api.register_device(metadata)
+
+
+def register_device(dataset):
+    metadata = DeviceMetadata(dataset)
+    api = get_broker_api()
+    return api.register_device(metadata)
