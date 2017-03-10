@@ -9,10 +9,6 @@ def test_injectors_no_args():
 
 def test_injectors_init_config():
     run("injectors --init-config")
-    from embers.injectors.config import get_config
-    config = get_config()
-    assert config.broker_address
-    assert config.root_auth
 
 
 def test_injectors_run_defaults():
