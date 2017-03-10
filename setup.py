@@ -18,6 +18,7 @@ setup(
     entry_points   = {
         "console_scripts": [
             "injectors = "+PACKAGE+".main:main",
+            "registry = "+PACKAGE+".registry_cli:main",
         ],
     },
     namespace_packages = [PACKAGE],
