@@ -4,11 +4,8 @@ from runner import run
 from test_lib import config
 
 
-def test_check_init_needed():
-    try:
-       run("registry --list")
-    except:
-       run("registry --init")
+def test_init_config():
+    run("registry --init")
 
 
 def test_unregister_parking():
