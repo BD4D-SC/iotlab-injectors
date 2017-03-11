@@ -1,6 +1,7 @@
 import pytest
 
 from runner import run
+from test_lib import config
 
 
 def test_check_init_needed():
@@ -28,11 +29,3 @@ def test_unregister_superfluous_root_auth(config):
         if uuid == config.root_auth_uuid:
             continue
         run("registry --unregister --uuid " + uuid)
-
-
-@pytest.fixture
-def config():
-    from embers.injectors.config import get_config
-    config = get_config(force_reload=True)
-    config.root_auth_uuid = config.root_auth[0]
-    return config
