@@ -42,4 +42,4 @@ def _register_device(metadata):
 
 def _lookup_devices(metadata):
     api = get_broker_api()
-    return api.get_devices(metadata)["devices"]
+    return api.get_devices(metadata)

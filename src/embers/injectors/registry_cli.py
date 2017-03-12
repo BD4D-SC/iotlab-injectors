@@ -16,7 +16,7 @@ def list(gateway, device, **_):
 
     api = config.get_broker_api()
     ret = api.get_devices()
-    for device in ret["devices"]:
+    for device in ret:
         line = "{uuid} {type}"
         line += " {dataset}" if device.has_key("dataset") else ""
         if not device.has_key("type"): device["type"] = "unknown"
