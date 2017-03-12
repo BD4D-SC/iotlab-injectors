@@ -11,14 +11,12 @@ def test_init_config():
 
 def test_unregister_parking(api):
     devices = api.get_devices({"dataset": "parking"})
-    devices = devices["devices"]
     for device in devices:
         api.unregister_device(device["uuid"])
 
 
 def test_unregister_superfluous_root_auth(api, config):
     devices = api.get_devices({"type": "root_auth"})
-    devices = devices["devices"]
     for device in devices:
         if device["uuid"] == config.root_auth_uuid:
             continue
