@@ -5,8 +5,9 @@ from test_lib import api
 from test_lib import config
 
 
-def test_init_config():
+def test_init_config(config):
     run("registry --init")
+    config.reload()
 
 
 def test_unregister_parking(api):
