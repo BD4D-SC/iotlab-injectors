@@ -19,6 +19,7 @@ setup(
         "console_scripts": [
             "injectors = "+PACKAGE+".main:main",
             "registry = "+PACKAGE+".registry_cli:main",
+            "subscriber = "+PACKAGE+".subscriber:main",
         ],
     },
     namespace_packages = [PACKAGE],
