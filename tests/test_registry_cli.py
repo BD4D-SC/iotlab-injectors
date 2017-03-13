@@ -43,6 +43,8 @@ def test_register_gw():
     uuid = ret.split()[1]
     registered.uuid = uuid
 
+    assert registered.uuid in run("registry --list")
+
 
 def test_register_gw_already_registered():
     with pytest.raises(Exception):
@@ -51,6 +53,8 @@ def test_register_gw_already_registered():
 
 def test_unregister_gw():
     run("registry --unregister --uuid " + registered.uuid)
+
+    assert registered.uuid not in run("registry --list")
 
 
 def test_unregister_root_auths():
