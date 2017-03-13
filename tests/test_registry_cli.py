@@ -57,11 +57,23 @@ def test_unregister_gw():
     assert registered.uuid not in run("registry --list")
 
 
-def test_register_unregister_traffic_device():
+def test_register_unregister_device():
     ret = run("registry --register --gateway traffic --device")
-    uuid = ret.split()[1]
 
-    ret = run("registry --unregister --uuid " + uuid)
+    uuid = ret.split()[1]
+    run("registry --unregister --uuid " + uuid)
+
+
+def test_register_device_no_gw():
+    with pytest.raises(Exception) as e:
+        run("registry --register --device")
+
+        assert "please specify --gateway" in e.output
+
+
+def test_unregister_unexisting_device():
+    with pytest.raises(Exception):
+        run("registry --unregister --uuid this-device-does-not-exist")
 
 
 def test_unregister_root_auths():
