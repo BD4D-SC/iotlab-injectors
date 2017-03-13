@@ -19,7 +19,7 @@ def test_registry_init_result(config):
     assert config.broker_address
     assert config.root_auth
 
-    registered.root_auth1 = config.root_auth
+    registered.root_auth1 = config.root_auth[0]
 
 
 def test_registry_init_with_broker(config):
@@ -28,14 +28,14 @@ def test_registry_init_with_broker(config):
     config.reload()
     assert config.broker_address == "localhost"
 
-    registered.root_auth2 = config.root_auth
+    registered.root_auth2 = config.root_auth[0]
 
 
 def test_registery_list():
     ret = run("registry --list")
 
-    assert registered.root_auth1[0] in ret
-    assert registered.root_auth2[0] in ret
+    assert registered.root_auth1 in ret
+    assert registered.root_auth2 in ret
 
 
 def test_register_gw():
@@ -65,7 +65,7 @@ def test_register_unregister_traffic_device():
 
 
 def test_unregister_root_auths():
-    run("registry --unregister --uuid " + registered.root_auth1[0])
-    run("registry --unregister --uuid " + registered.root_auth2[0])
+    run("registry --unregister --uuid " + registered.root_auth1)
+    run("registry --unregister --uuid " + registered.root_auth2)
     import os
     os.remove("config.py")
