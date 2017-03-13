@@ -62,9 +62,3 @@ def init_config(broker, **_):
 
 def s(nb):
     return "s" if nb != 1 else ""
-
-
-if __name__ == "__main__":
-    _ = main()
-    import sys
-    sys.exit(_)
