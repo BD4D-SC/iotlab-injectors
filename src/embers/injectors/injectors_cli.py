@@ -1,4 +1,5 @@
-from parser import command, create_parser
+from command_parser import command
+from parser import create_parser
 
 import registry
 import injector
@@ -62,9 +63,3 @@ def init_config(broker, **_):
 
 def s(nb):
     return "s" if nb != 1 else ""
-
-
-if __name__ == "__main__":
-    _ = main()
-    import sys
-    sys.exit(_)

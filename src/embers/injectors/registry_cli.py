@@ -1,4 +1,5 @@
-from parser import create_parser, command
+from command_parser import command
+from parser import create_parser
 from parser import DATASETS
 import config
 import registry

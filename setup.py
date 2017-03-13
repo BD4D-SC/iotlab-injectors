@@ -17,7 +17,7 @@ setup(
     package_dir    = {"": "src"},
     entry_points   = {
         "console_scripts": [
-            "injectors = "+PACKAGE+".main:main",
+            "injectors = "+PACKAGE+".injectors_cli:main",
             "registry = "+PACKAGE+".registry_cli:main",
             "subscriber = "+PACKAGE+".subscriber:main",
         ],
