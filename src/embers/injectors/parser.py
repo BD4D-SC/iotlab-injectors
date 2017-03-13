@@ -1,4 +1,4 @@
-import argparse
+from command_parser import Parser
 
 
 DEFAULTS = {
@@ -16,14 +16,13 @@ DATASETS = "parking traffic pollution"
 
 
 def create_parser():
-    parser = argparse.ArgumentParser(add_help=False)
+    parser = Parser()
 
-    add_commands(parser)
+    parser.add_commands()
+
     add_params(parser)
     add_datasets(parser)
     add_protocols(parser)
-
-    add_hidden_help(parser)
 
     parser.set_defaults(**DEFAULTS)
 
@@ -66,35 +65,3 @@ def add_datasets(parser):
         "--dataset",
         choices=choice.split(),
         help="send events using specified dataset  [%(default)s]")
-
-
-def add_hidden_help(parser):
-    parser.add_argument(
-        "-h", "--help", action="help",
-        help=argparse.SUPPRESS)
-
-
-def add_commands(parser):
-    group = parser.add_mutually_exclusive_group()
-
-    for cmd, func in command.func.items():
-        group.add_argument(
-            "--" + cmd,
-            action="store_const", const=cmd,
-            dest="command",
-            help=func.__doc__)
-
-
-def command(f):
-    """ decorator to define parser commands """
-    command.func[f.__name__.replace("_", "-")] = f
-
-
-def run_command(opts):
-    args = opts.__dict__
-    return command.func[opts.command](**args)
-
-
-import collections
-command.func = collections.OrderedDict()
-command.run = run_command
