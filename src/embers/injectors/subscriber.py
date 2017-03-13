@@ -2,6 +2,8 @@ import embers.meshblu.subscriber as subscriber
 import embers.injectors.registry as registry
 import embers.injectors.config as config
 
+from command_parser import Parser
+
 gateway_types = "parking traffic pollution"
 
 
@@ -46,18 +48,3 @@ def parse_args(choices):
         parser.print_usage()
         parser.exit(0)
     return opts.command
-
-
-import argparse
-class Parser(argparse.ArgumentParser):
-    def __init__(self):
-        super(Parser, self).__init__(add_help=False)
-        self.add_argument("-h", "--help", action="help",
-                          help=argparse.SUPPRESS)
-        self.commands = self.add_mutually_exclusive_group()
-
-    def add_command(self, command):
-        self.commands.add_argument(
-            "--" + command,
-            action="store_const", const=command,
-            dest="command")
