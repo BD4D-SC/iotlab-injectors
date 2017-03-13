@@ -6,7 +6,7 @@ import injector
 
 
 DEFAULTS = {
-    "dataset": "parking",
+    "events": "parking",
     "protocol": "http",
     "nb_devices": 1,
     "ev_per_hour": 3600,
@@ -16,7 +16,7 @@ DEFAULTS = {
 
 PROTOCOLS = "http mqtt coap"
 
-DATASETS = "parking traffic pollution"
+EVENTS = "parking traffic pollution"
 
 
 def main():
@@ -25,21 +25,21 @@ def main():
 
 
 @command
-def run(nb_devices, dataset, protocol, ev_per_hour, duration, **_):
+def run(nb_devices, events, protocol, ev_per_hour, duration, **_):
     """ run <nb> injectors on local node """
 
     print("running {nb} '{}+{}' injector{s} on local node".format(
-          dataset, protocol, nb=nb_devices, s=s(nb_devices)))
+          events, protocol, nb=nb_devices, s=s(nb_devices)))
 
-    gateway = registry.lookup_gateway(dataset)
+    gateway = registry.lookup_gateway(events)
     if not gateway:
-        gateway = registry.register_gateway(dataset)
-        print("==> registered gateway '{}'".format(dataset))
+        gateway = registry.register_gateway(events)
+        print("==> registered gateway '{}'".format(events))
 
-    devices = registry.lookup_devices(dataset)
+    devices = registry.lookup_devices(events)
     if nb_devices > len(devices):
         more = nb_devices - len(devices)
-        devices += [ registry.register_device(dataset) for i in range(more) ]
+        devices += [ registry.register_device(events) for i in range(more) ]
         print("==> registered {} more device{s}".format(more, s=s(more)))
 
     devices = devices[:nb_devices]
@@ -50,7 +50,7 @@ def run(nb_devices, dataset, protocol, ev_per_hour, duration, **_):
     stats = injector.stats()
 
     try:
-        injector.run(devices, gateway, dataset, protocol,
+        injector.run(devices, gateway, events, protocol,
                      ev_per_hour, duration, stats)
     except KeyboardInterrupt:
         return 1
@@ -59,11 +59,11 @@ def run(nb_devices, dataset, protocol, ev_per_hour, duration, **_):
 
 
 @command
-def deploy(nb_devices, dataset, **_):
+def deploy(nb_devices, events, **_):
     """ deploy injectors on <nb> A8 nodes """
 
     print("deploying {nb} node{s} with '{}' injector{s}".format(
-          dataset, nb=nb_devices, s=s(nb_devices)))
+          events, nb=nb_devices, s=s(nb_devices)))
     pass
 
 
@@ -82,7 +82,7 @@ def create_parser():
     parser = Parser()
 
     add_params(parser)
-    add_datasets(parser)
+    add_events(parser)
     add_protocols(parser)
 
     parser.set_defaults(**DEFAULTS)
@@ -120,9 +120,9 @@ def add_protocols(parser):
         help="send events using specified protocol [%(default)s]")
 
 
-def add_datasets(parser):
-    choice = DATASETS
+def add_events(parser):
+    choice = EVENTS
     parser.add_argument(
-        "--dataset",
+        "--events",
         choices=choice.split(),
-        help="send events using specified dataset  [%(default)s]")
+        help="send events of specified type  [%(default)s]")
