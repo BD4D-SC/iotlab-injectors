@@ -31,6 +31,13 @@ def test_registry_init_with_broker(config):
     registered.root_auth2 = config.root_auth
 
 
+def test_registery_list():
+    ret = run("registry --list")
+
+    assert registered.root_auth1[0] in ret
+    assert registered.root_auth2[0] in ret
+
+
 def test_register_gw():
     ret = run("registry --register --gateway traffic")
     uuid = ret.split()[1]
