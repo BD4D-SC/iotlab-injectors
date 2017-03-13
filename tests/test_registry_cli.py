@@ -46,7 +46,7 @@ def test_unregister_gw():
     run("registry --unregister --uuid " + registered.uuid)
 
 
-def test_cleanup():
+def test_unregister_root_auths():
     run("registry --unregister --uuid " + registered.root_auth1[0])
     run("registry --unregister --uuid " + registered.root_auth2[0])
     import os
