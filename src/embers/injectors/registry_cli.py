@@ -1,5 +1,5 @@
 from command_parser import Parser, command
-from injectors_cli import DATASETS
+from injectors_cli import EVENTS
 from injectors_cli import DEFAULTS as _DEFAULTS
 import config
 import registry
@@ -61,11 +61,11 @@ def unregister(uuid, **_):
 
 
 def add_parameters(parser):
-    choice = DATASETS
+    choice = EVENTS
     parser.add_argument(
         "--gateway",
         choices=choice.split(),
-        help="gateway|device type (dataset) to register")
+        help="gateway|device type (events) to register")
 
     parser.add_argument(
         "--broker",
