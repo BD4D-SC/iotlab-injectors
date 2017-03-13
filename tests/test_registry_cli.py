@@ -1,7 +1,7 @@
 import pytest
 
 from runner import run
-from embers.injectors.config import get_config
+from test_lib import config
 
 class registered: pass  # a global namespace for this test
 
@@ -14,20 +14,18 @@ def test_registry_init():
     run("registry --init")
 
 
-def test_get_config():
-    config = get_config()
+def test_registry_init_result(config):
+    config.reload()
     assert config.broker_address
     assert config.root_auth
 
     registered.root_auth1 = config.root_auth
 
 
-def test_registry_init_with_broker():
+def test_registry_init_with_broker(config):
     run("registry --init --broker localhost")
 
-
-def test_get_config_reload():
-    config = get_config(force_reload=True)
+    config.reload()
     assert config.broker_address == "localhost"
 
     registered.root_auth2 = config.root_auth
