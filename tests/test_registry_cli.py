@@ -57,6 +57,13 @@ def test_unregister_gw():
     assert registered.uuid not in run("registry --list")
 
 
+def test_register_unregister_traffic_device():
+    ret = run("registry --register --gateway traffic --device")
+    uuid = ret.split()[1]
+
+    ret = run("registry --unregister --uuid " + uuid)
+
+
 def test_unregister_root_auths():
     run("registry --unregister --uuid " + registered.root_auth1[0])
     run("registry --unregister --uuid " + registered.root_auth2[0])
