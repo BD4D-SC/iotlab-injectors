@@ -1,4 +1,5 @@
-from parser import command, create_parser
+from command_parser import command
+from parser import create_parser
 
 import registry
 import injector
