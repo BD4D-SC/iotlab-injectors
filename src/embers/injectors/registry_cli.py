@@ -1,6 +1,6 @@
 from command_parser import command
-from parser import create_parser
-from parser import DATASETS
+from injectors_cli import create_parser
+from injectors_cli import DATASETS
 import config
 import registry
 
@@ -91,7 +91,7 @@ def main():
 
 
 def patch_parser_module():
-    import parser
+    import injectors_cli as parser
     parser.add_protocols = lambda x: True
     parser.add_datasets = lambda x: True
     parser.add_params = add_parameters
