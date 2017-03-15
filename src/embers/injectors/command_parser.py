@@ -1,4 +1,6 @@
 import argparse
+import collections
+import sys
 
 
 class Parser(argparse.ArgumentParser):
@@ -22,6 +24,7 @@ class Parser(argparse.ArgumentParser):
 
 def command(f):
     """ decorator to define parser commands """
+    _init_func()
     command.func[f.__name__.replace("_", "-")] = f
 
 
@@ -30,6 +33,12 @@ def run_command(opts):
     return command.func[opts.command](**args)
 
 
-import collections
-command.func = collections.OrderedDict()
+def _init_func():
+    caller = sys._getframe(2).f_globals['__name__']
+    if command.caller == caller:
+        return
+    command.caller = caller
+    command.func = collections.OrderedDict()
+
+command.caller = None
 command.run = run_command
