@@ -46,3 +46,4 @@ def _init_func():
     command.func = collections.OrderedDict()
 
 command.caller = None
+command.func = collections.OrderedDict()
