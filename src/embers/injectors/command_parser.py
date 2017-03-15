@@ -19,6 +19,12 @@ class Parser(argparse.ArgumentParser):
             dest="command",
             help=help)
 
+    def parse_and_run(self):
+        opts = self.parse_args()
+        if opts.command:
+            return _run_command(opts)
+        else:
+            self.print_usage()
 
 
 def command(f):
@@ -27,7 +33,7 @@ def command(f):
     command.func[f.__name__.replace("_", "-")] = f
 
 
-def run_command(opts):
+def _run_command(opts):
     args = opts.__dict__
     return command.func[opts.command](**args)
 
@@ -40,4 +46,3 @@ def _init_func():
     command.func = collections.OrderedDict()
 
 command.caller = None
-command.run = run_command
