@@ -1,4 +1,6 @@
 import argparse
+import collections
+import sys
 
 
 class Parser(argparse.ArgumentParser):
@@ -7,6 +9,8 @@ class Parser(argparse.ArgumentParser):
         self.add_argument("-h", "--help", action="help",
                           help=argparse.SUPPRESS)
         self.commands = self.add_mutually_exclusive_group()
+        for cmd, func in command.func.items():
+            self.add_command(cmd, help=func.__doc__)
 
     def add_command(self, command, help=None):
         self.commands.add_argument(
@@ -15,21 +19,30 @@ class Parser(argparse.ArgumentParser):
             dest="command",
             help=help)
 
-    def add_commands(self):
-        for cmd, func in command.func.items():
-            self.add_command(cmd, help=func.__doc__)
+    def parse_and_run(self):
+        opts = self.parse_args()
+        if opts.command:
+            return _run_command(opts)
+        else:
+            self.print_usage()
 
 
 def command(f):
     """ decorator to define parser commands """
+    _init_func()
     command.func[f.__name__.replace("_", "-")] = f
 
 
-def run_command(opts):
+def _run_command(opts):
     args = opts.__dict__
     return command.func[opts.command](**args)
 
 
-import collections
-command.func = collections.OrderedDict()
-command.run = run_command
+def _init_func():
+    caller = sys._getframe(2).f_globals['__name__']
+    if command.caller == caller:
+        return
+    command.caller = caller
+    command.func = collections.OrderedDict()
+
+command.caller = None

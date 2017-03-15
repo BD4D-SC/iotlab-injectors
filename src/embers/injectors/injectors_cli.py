@@ -21,12 +21,7 @@ DATASETS = "parking traffic pollution"
 
 def main():
     parser = create_parser()
-    opts = parser.parse_args()
-
-    if opts.command:
-        return command.run(opts)
-    else:
-        parser.print_usage()
+    return parser.parse_and_run()
 
 
 @command
@@ -81,8 +76,6 @@ def s(nb):
 
 def create_parser():
     parser = Parser()
-
-    parser.add_commands()
 
     add_params(parser)
     add_datasets(parser)
