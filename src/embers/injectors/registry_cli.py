@@ -1,8 +1,13 @@
-from command_parser import command
-from injectors_cli import create_parser
+from command_parser import Parser, command
 from injectors_cli import DATASETS
+from injectors_cli import DEFAULTS as _DEFAULTS
 import config
 import registry
+
+
+DEFAULTS = {
+    "broker": _DEFAULTS["broker"],
+}
 
 
 @command
@@ -79,22 +84,7 @@ def add_parameters(parser):
 
 
 def main():
-    patch_parser_module()
-
-    parser = create_parser()
-    opts = parser.parse_args()
-
-    if opts.command:
-        return command.run(opts)
-    else:
-        parser.print_usage()
-
-
-def patch_parser_module():
-    import injectors_cli as parser
-    parser.add_protocols = lambda x: True
-    parser.add_datasets = lambda x: True
-    parser.add_params = add_parameters
-    parser.DEFAULTS = {
-        "broker": parser.DEFAULTS["broker"],
-    }
+    parser = Parser()
+    add_parameters(parser)
+    parser.set_defaults(**DEFAULTS)
+    return parser.parse_and_run()
