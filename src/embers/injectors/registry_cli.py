@@ -24,7 +24,7 @@ def list(gateway, device, **_):
     ret = api.get_devices()
     for device in ret:
         line = "{uuid} {type}"
-        line += " {dataset}" if device.has_key("dataset") else ""
+        line += " {event_type}" if device.has_key("event_type") else ""
         if not device.has_key("type"): device["type"] = "unknown"
         print(line.format(**device))
 
@@ -34,13 +34,13 @@ def register(gateway, device, **_):
     """ register specified device """
 
     if not gateway:
-        print("please specify --gateway <dataset>")
+        print("please specify --gateway <event type>")
         return 1
 
     if device:
-        ret = registry.register_device(dataset=gateway)
+        ret = registry.register_device(event_type=gateway)
     else:
-        ret = registry.register_gateway(dataset=gateway)
+        ret = registry.register_gateway(event_type=gateway)
         if not ret:
             print("gateway already registered")
             return 1

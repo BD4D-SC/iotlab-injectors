@@ -2,16 +2,16 @@ from config import get_config
 from config import get_broker_api
 
 
-def GatewayMetadata(dataset):
-    return {"type": "gateway", "dataset": str(dataset)}
+def GatewayMetadata(event_type):
+    return {"type": "gateway", "event_type": str(event_type)}
 
 
-def DeviceMetadata(dataset):
-    return {"type": "device", "dataset": str(dataset)}
+def DeviceMetadata(event_type):
+    return {"type": "device", "event_type": str(event_type)}
 
 
-def register_gateway(dataset):
-    metadata = GatewayMetadata(dataset)
+def register_gateway(event_type):
+    metadata = GatewayMetadata(event_type)
     gateway = _lookup_devices(metadata)
     if gateway:
         return False
@@ -19,19 +19,19 @@ def register_gateway(dataset):
         return _register_device(metadata)
 
 
-def register_device(dataset):
-    metadata = DeviceMetadata(dataset)
+def register_device(event_type):
+    metadata = DeviceMetadata(event_type)
     return _register_device(metadata)
 
 
-def lookup_gateway(dataset):
-    metadata = GatewayMetadata(dataset)
+def lookup_gateway(event_type):
+    metadata = GatewayMetadata(event_type)
     ret = _lookup_devices(metadata)
     return ret[0] if ret else None
 
 
-def lookup_devices(dataset):
-    metadata = DeviceMetadata(dataset)
+def lookup_devices(event_type):
+    metadata = DeviceMetadata(event_type)
     return _lookup_devices(metadata)
 
 
