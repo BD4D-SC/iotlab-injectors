@@ -9,8 +9,7 @@ class Parser(argparse.ArgumentParser):
         self.add_argument("-h", "--help", action="help",
                           help=argparse.SUPPRESS)
         self.commands = self.add_mutually_exclusive_group()
-        for cmd, func in command.func.items():
-            self.add_command(cmd, help=func.__doc__)
+        _add_commands(self)
 
     def add_command(self, command, help=None):
         self.commands.add_argument(
@@ -31,6 +30,11 @@ def command(f):
     """ decorator to define parser commands """
     _init_func()
     command.func[f.__name__.replace("_", "-")] = f
+
+
+def _add_commands(parser):
+    for cmd, func in command.func.items():
+        parser.add_command(cmd, help=func.__doc__)
 
 
 def _run_command(opts):
