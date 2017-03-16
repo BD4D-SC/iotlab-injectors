@@ -11,7 +11,7 @@ def test_init_config(config):
 
 
 def test_unregister_parking(api):
-    devices = api.get_devices({"dataset": "parking"})
+    devices = api.get_devices({"event_type": "parking"})
     for device in devices:
         api.unregister_device(device["uuid"])
 
