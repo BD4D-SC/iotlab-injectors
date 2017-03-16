@@ -98,7 +98,7 @@ def add_params(parser):
         help="number of events per hour      [%(default)s]")
 
     parser.add_argument(
-        "--duration", type=int,
+        "--duration", type=float,
         metavar="<min>",
         help="number of minutes to run for   [%(default)s]")
 
