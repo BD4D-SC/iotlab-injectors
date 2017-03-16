@@ -9,8 +9,8 @@ DEFAULTS = {
     "dataset": "parking",
     "protocol": "http",
     "nb_devices": 1,
-    "ev_per_hour": 360,
-    "duration": 1,
+    "ev_per_hour": 3600,
+    "duration": .1,
     "broker": "127.0.0.1",
 }
 
