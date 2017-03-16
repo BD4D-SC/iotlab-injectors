@@ -16,8 +16,12 @@ def _run(senders, data_source, duration, ev_per_hour):
     start_time = time.time()
     end_time = start_time + duration * 60
     while end_time > time.time():
+        t1 = time.time()
         send_next_events(senders, data_source)
-        time.sleep(3600./ev_per_hour)
+        t2 = time.time()
+        sleep_time = 3600./ev_per_hour - t2 + t1
+        if sleep_time > 0:
+            time.sleep(sleep_time)
 
 
 def reset_devices(devices):
