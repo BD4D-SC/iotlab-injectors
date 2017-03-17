@@ -29,10 +29,9 @@ def send_next_events(senders, data_source):
         sender.join()
 
 
-class EventSender(threading.Thread):
+class EventSender:
 
     def __init__(self, gateway, device):
-        super(self.__class__, self).__init__()
         assert self.protocol
         broker = config.get_config().broker_address
         self.client = self.protocol(broker)
@@ -40,11 +39,14 @@ class EventSender(threading.Thread):
         self.gateway = gateway["uuid"]
 
     def send(self, event):
-        self.event = event
-        self.start()
+        def run():
+            self.client.publish(self.gateway, event)
+        self.thread = threading.Thread(target=run)
+        self.thread.start()
 
-    def run(self):
-        self.client.publish(self.gateway, self.event)
+    def join(self):
+        self.thread.join()
+
 
 
 class DataSource:
