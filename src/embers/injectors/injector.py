@@ -8,10 +8,14 @@ def run(devices, gateway, dataset, protocol, ev_per_hour, duration):
     EventSender.protocol = import_client(protocol)
     data_source = DataSource(dataset)
     devices = reset_devices(devices)
+    senders = [ EventSender(gateway, device) for device in devices ]
+    return _run(senders, data_source, duration, ev_per_hour)
+
+
+def _run(senders, data_source, duration, ev_per_hour):
     start_time = time.time()
     end_time = start_time + duration * 60
     while end_time > time.time():
-        senders = [ EventSender(gateway, device) for device in devices ]
         send_next_events(senders, data_source)
         time.sleep(3600./ev_per_hour)
 
@@ -29,10 +33,9 @@ def send_next_events(senders, data_source):
         sender.join()
 
 
-class EventSender(threading.Thread):
+class EventSender:
 
     def __init__(self, gateway, device):
-        super(self.__class__, self).__init__()
         assert self.protocol
         broker = config.get_config().broker_address
         self.client = self.protocol(broker)
@@ -40,11 +43,14 @@ class EventSender(threading.Thread):
         self.gateway = gateway["uuid"]
 
     def send(self, event):
-        self.event = event
-        self.start()
+        def run():
+            self.client.publish(self.gateway, event)
+        self.thread = threading.Thread(target=run)
+        self.thread.start()
 
-    def run(self):
-        self.client.publish(self.gateway, self.event)
+    def join(self):
+        self.thread.join()
+
 
 
 class DataSource:
