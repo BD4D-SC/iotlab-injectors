@@ -22,4 +22,4 @@ def test_injectors_run_protocol(protocol):
 
 
 def test_injectors_run_many_parking():
-    run("injectors --run --nb-devices 50 --dataset parking")
+    run("injectors --run --nb-devices 50 --events parking")
