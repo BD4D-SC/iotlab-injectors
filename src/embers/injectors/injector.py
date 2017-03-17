@@ -3,25 +3,33 @@ import config
 import threading
 import time
 
+from stats import stats
 
-def run(devices, gateway, dataset, protocol, ev_per_hour, duration):
+
+def run(devices, gateway, dataset, protocol, ev_per_hour, duration, stats):
     EventSender.protocol = import_client(protocol)
     data_source = DataSource(dataset)
     devices = reset_devices(devices)
     senders = [ EventSender(gateway, device) for device in devices ]
-    return _run(senders, data_source, duration, ev_per_hour)
+    return _run(senders, data_source, duration, ev_per_hour, stats)
 
 
-def _run(senders, data_source, duration, ev_per_hour):
+def _run(senders, data_source, duration, ev_per_hour, stats):
     start_time = time.time()
     end_time = start_time + duration * 60
+    stats.start_time = start_time
+    stats.nb_devices = len(senders)
     while end_time > time.time():
         t1 = time.time()
         send_next_events(senders, data_source)
         t2 = time.time()
         sleep_time = 3600./ev_per_hour - t2 + t1
-        if sleep_time > 0:
-            time.sleep(sleep_time)
+        if sleep_time < 0:
+            stats.time_overflow.append(-sleep_time)
+            sleep_time = 0
+        stats.nb_loops += 1
+        stats.end_time = t2
+        time.sleep(sleep_time)
 
 
 def reset_devices(devices):
