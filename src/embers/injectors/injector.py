@@ -8,7 +8,7 @@ from stats import stats
 
 def run(devices, gateway, dataset, protocol, ev_per_hour, duration, stats):
     EventSender.protocol = import_client(protocol)
-    data_source = DataSource(dataset)
+    data_source = DataSource(dataset, event_type=gateway)
     devices = reset_devices(devices)
     senders = [ EventSender(gateway, device) for device in devices ]
     return _run(senders, data_source, duration, ev_per_hour, stats)
@@ -67,12 +67,13 @@ class EventSender:
 
 class DataSource:
 
-    def __init__(self, dataset):
-        pass
+    def __init__(self, dataset, event_type):
+        self.event_type = event_type
 
     def get_source(self, i):
         class it:
-            def next(self): pass
+            def next(_): pass
+            #    return { "event_type": self.event_type }
 
         return it()
 
