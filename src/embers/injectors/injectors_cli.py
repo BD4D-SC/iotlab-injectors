@@ -47,11 +47,15 @@ def run(nb_devices, dataset, protocol, ev_per_hour, duration, **_):
     print("sending {} event{s}/h (per injector) for {} min.".format(
           ev_per_hour, duration, s=s(ev_per_hour)))
 
+    stats = injector.stats()
+
     try:
         injector.run(devices, gateway, dataset, protocol,
-                     ev_per_hour, duration)
+                     ev_per_hour, duration, stats)
     except KeyboardInterrupt:
         return 1
+    finally:
+        stats.dump()
 
 
 @command
