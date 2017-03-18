@@ -7,7 +7,7 @@ import datasets
 
 
 DEFAULTS = {
-    "events": "parking",
+    "events": "traffic",
     "protocol": "http",
     "nb_devices": 1,
     "ev_per_hour": 3600,
