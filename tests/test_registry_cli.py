@@ -38,6 +38,15 @@ def test_registery_list():
     assert registered.root_auth2 in ret
 
 
+def test_list_and_unregister_pollution_gw():
+    ret = run("registry --list")
+    target = "gateway pollution"
+    for line in ret.split('\n'):
+        if target in line:
+            uuid = line.split()[0]
+            run("registry --unregister --uuid " + uuid)
+
+
 def test_register_gw():
     ret = run("registry --register --gateway pollution")
     uuid = ret.split()[1]
