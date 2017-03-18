@@ -1,7 +1,7 @@
 class stats:
-    start_time = None
-    end_time = None
-    nb_devices = None
+    start_time = 0
+    end_time = 0
+    nb_devices = 0
     nb_loops = 0
     time_overflow = []
 
