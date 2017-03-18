@@ -7,9 +7,8 @@ class config: pass  # namespace
 
 
 def get_config(force_reload=False):
-    if force_reload or not hasattr(get_config, "config_loaded"):
-        execfile(CONFIG_FILE, config.__dict__)
-        get_config.config_loaded = True
+    if force_reload or not is_loaded():
+        load_config()
     assert config.broker_address
     assert config.root_auth
     return config()
@@ -31,3 +30,12 @@ def init_config(broker_address):
     conf = "root_auth = {}\nbroker_address = '{}'\n"
     open(CONFIG_FILE, 'w') \
          .write(conf.format(root_auth, broker_address))
+
+
+def load_config():
+    execfile(CONFIG_FILE, config.__dict__)
+    load_config.config_loaded = True
+
+
+def is_loaded():
+    return hasattr(load_config, "config_loaded")
