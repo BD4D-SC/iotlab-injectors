@@ -11,7 +11,7 @@ def run(devices, gateway, dataset, protocol, ev_per_hour, duration, stats):
     data_source = DataSource(dataset, event_type=gateway)
     devices = reset_devices(devices)
     senders = [ EventSender(gateway, device) for device in devices ]
-    return _run(senders, data_source, duration, ev_per_hour, stats)
+    _run(senders, data_source, duration, ev_per_hour, stats)
 
 
 def _run(senders, data_source, duration, ev_per_hour, stats):
