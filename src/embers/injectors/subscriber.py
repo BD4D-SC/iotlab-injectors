@@ -4,7 +4,8 @@ import embers.injectors.config as config
 
 from command_parser import Parser
 
-gateway_types = "parking traffic pollution"
+from injectors_cli import EVENTS as gateway_types
+
 
 
 def main():

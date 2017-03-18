@@ -9,6 +9,7 @@ class Parser(argparse.ArgumentParser):
         self.add_argument("-h", "--help", action="help",
                           help=argparse.SUPPRESS)
         self.commands = self.add_mutually_exclusive_group()
+        _init_func()
         _add_commands(self)
 
     def add_command(self, command, help=None):
