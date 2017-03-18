@@ -4,11 +4,12 @@ import threading
 import time
 
 from stats import stats
+from datasets import get_dataset
 
 
 def run(devices, gateway, dataset, protocol, ev_per_hour, duration, stats):
     EventSender.protocol = import_client(protocol)
-    data_source = DataSource(dataset, event_type=gateway)
+    data_source = get_dataset(dataset, event_type=gateway["event_type"])
     devices = reset_devices(devices)
     senders = [ EventSender(gateway, device) for device in devices ]
     _run(senders, data_source, duration, ev_per_hour, stats)
@@ -62,20 +63,6 @@ class EventSender:
 
     def join(self):
         self.thread.join()
-
-
-
-class DataSource:
-
-    def __init__(self, dataset, event_type):
-        self.event_type = event_type
-
-    def get_source(self, i):
-        class it:
-            def next(_): pass
-            #    return { "event_type": self.event_type }
-
-        return it()
 
 
 def import_client(protocol):

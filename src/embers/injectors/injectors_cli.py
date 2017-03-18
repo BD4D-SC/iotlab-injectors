@@ -3,6 +3,7 @@ from command_parser import Parser
 
 import registry
 import injector
+import datasets
 
 
 DEFAULTS = {
@@ -11,6 +12,7 @@ DEFAULTS = {
     "nb_devices": 1,
     "ev_per_hour": 3600,
     "duration": .1,
+    "dataset": "synthetic",
     "broker": "127.0.0.1",
 }
 
@@ -25,7 +27,7 @@ def main():
 
 
 @command
-def run(nb_devices, events, protocol, ev_per_hour, duration, **_):
+def run(nb_devices, events, dataset, protocol, ev_per_hour, duration, **_):
     """ run <nb> injectors on local node """
 
     print("running {nb} '{}+{}' injector{s} on local node".format(
@@ -50,7 +52,7 @@ def run(nb_devices, events, protocol, ev_per_hour, duration, **_):
     stats = injector.stats()
 
     try:
-        injector.run(devices, gateway, events, protocol,
+        injector.run(devices, gateway, dataset, protocol,
                      ev_per_hour, duration, stats)
     except KeyboardInterrupt:
         return 1
@@ -82,6 +84,7 @@ def create_parser():
     parser = Parser()
 
     add_params(parser)
+    add_datasets(parser)
     add_events(parser)
     add_protocols(parser)
 
@@ -126,3 +129,11 @@ def add_events(parser):
         "--events",
         choices=choice.split(),
         help="send events of specified type  [%(default)s]")
+
+
+def add_datasets(parser):
+    choices = datasets.get_datasets()
+    parser.add_argument(
+        "--dataset",
+        choices=choices,
+        help="dataset to use as events source [%(default)s]")
