@@ -9,8 +9,6 @@ class config: pass  # namespace
 def get_config(force_reload=False):
     if force_reload or not is_loaded():
         load_config_exit_on_fail()
-    assert config.broker_address
-    assert config.root_auth
     return config()
 
 
@@ -43,6 +41,8 @@ def init_config(broker_address):
 
 def load_config():
     execfile(CONFIG_FILE, config.__dict__)
+    assert config.broker_address
+    assert config.root_auth
     load_config.config_loaded = True
 
 
