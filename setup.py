@@ -22,7 +22,7 @@ setup(
             "subscriber = "+PACKAGE+".subscriber:main",
         ],
     },
-    namespace_packages = [PACKAGE],
+    namespace_packages = ["embers", PACKAGE],
 
     install_requires = [
         "embers.meshblu",
