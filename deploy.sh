@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 #set -x
 
 NB_NODES=${1:-2}
@@ -109,8 +109,22 @@ _() {
 	disown $_pid
 	date_stamp "=== $func"
 	$func &>> $LOG
-	kill $_pid
+	kill $_pid && _pid=
 	printf "\r%-30s [%s]\n" $func "done"
+}
+
+on_error() {
+	[ $_pid ] && kill $_pid
+	echo "ERROR"
+	echo
+	echo "last line in $LOG:"
+	tail -1 $LOG
+	exit 1
+}
+
+init_exit_trap() {
+	exec 3>&1
+	trap '[ $? = 0 ] || on_error >&3' EXIT
 }
 
 date_stamp() {
@@ -138,5 +152,7 @@ finish() {
 }
 
 [ -f $LOCAL_OVERRIDES ] && source $LOCAL_OVERRIDES
+
+init_exit_trap
 
 main
