@@ -1,12 +1,15 @@
 #!/bin/bash -e
 #set -x
 
-NB_NODES=${1:-2}
-DURATION=${2:-5}
+set_params() {
+	NB_NODES=${1:-2}
+	DURATION=${2:-5}
 
-BROKER=${BROKER:-DEFINE_MESHBLU.broker.fqdn}
+	BROKER=${BROKER:-DEFINE_MESHBLU.broker.fqdn}
 
-IOTLAB_SITE=${3:-grenoble}
+	IOTLAB_SITE=${3:-grenoble}
+}
+
 LOCAL_OVERRIDES="deploy.local.sh"
 
 LOG=${LOG:-$0.log}
@@ -136,11 +139,21 @@ check_nb_nodes() {
 	echo "$msg"
 }
 
+init() {
+	init_exit_trap
+	log_trace set_params $@
+}
+
+log_trace() {
+	set -x
+	$* &>> $LOG
+	set +x
+} &>/dev/null
+
 
 [ -f $LOCAL_OVERRIDES ] && source $LOCAL_OVERRIDES
 
-init_exit_trap
-
 log "=== starting ===="
+init "$@"
 main
 log "=== complete ==="
