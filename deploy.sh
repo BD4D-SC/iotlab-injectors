@@ -13,8 +13,6 @@ LOG=${LOG:-$0.log}
 
 
 main() {
-	startup
-
 	_ start_experiment
 	nodes=`get_nodes`
 
@@ -25,8 +23,6 @@ main() {
 
 	_ deploy_injectors
 	_ run_injectors
-
-	finish
 }
 
 start_experiment() {
@@ -107,7 +103,7 @@ _() {
 	func=$1
 	animated_wait & _pid=$!
 	disown $_pid
-	date_stamp "=== $func"
+	log "=== $func"
 	$func &>> $LOG
 	kill $_pid && _pid=
 	printf "\r%-30s [%s]\n" $func "done"
@@ -127,7 +123,7 @@ init_exit_trap() {
 	trap '[ $? = 0 ] || on_error >&3' EXIT
 }
 
-date_stamp() {
+log() {
 	date +"%F %T $*" >> $LOG
 }
 
@@ -136,23 +132,15 @@ check_nb_nodes() {
 	[ $nb_nodes = $NB_NODES ] && return
 
 	msg="!!! deploying on $nb_nodes nodes"
-	date_stamp "$msg"
+	log  "$msg"
 	echo "$msg"
 }
 
-startup() {
-	cat /dev/null > $LOG
-
-	date_stamp "=== starting" \
-	"[$NB_NODES nodes @ $IOTLAB_SITE / $DURATION min]"
-}
-
-finish() {
-	date_stamp "=== complete ==="
-}
 
 [ -f $LOCAL_OVERRIDES ] && source $LOCAL_OVERRIDES
 
 init_exit_trap
 
+log "=== starting ===="
 main
+log "=== complete ==="
