@@ -17,13 +17,13 @@ def init(broker, **_):
 
 
 @command
-def list(events, device, gw, **_):
+def list(events, device, gateway, **_):
     """ list registered devices """
 
     selector = {}
     if events:  selector["event_type"] = events
     if device:  selector["type"] = "device"
-    if gw:      selector["type"] = "gateway"
+    if gateway: selector["type"] = "gateway"
 
     api = config.get_broker_api()
     ret = api.get_devices(selector)
@@ -35,17 +35,17 @@ def list(events, device, gw, **_):
 
 
 @command
-def register(gateway, device, **_):
+def register(events, device, **_):
     """ register specified device """
 
-    if not gateway:
-        print("please specify --gateway <event type>")
+    if not events:
+        print("please specify --events <event type>")
         return 1
 
     if device:
-        ret = registry.register_device(event_type=gateway)
+        ret = registry.register_device(event_type=events)
     else:
-        ret = registry.register_gateway(event_type=gateway)
+        ret = registry.register_gateway(event_type=events)
         if not ret:
             print("gateway already registered")
             return 1
@@ -71,12 +71,6 @@ def unregister(uuid, events, **_):
 
 
 def add_parameters(parser):
-    choice = EVENTS
-    parser.add_argument(
-        "--gateway",
-        choices=choice.split(),
-        help="gateway|device type (events) to register")
-
     parser.add_argument(
         "--broker",
         metavar="<address>",
@@ -98,7 +92,7 @@ def add_parameters(parser):
         action="store_true",
         help="register a device (instead of a gateway)")
     group.add_argument(
-        "--gw",
+        "--gateway",
         action="store_true",
         help="register a gateway (optional, this is the default)")
 
