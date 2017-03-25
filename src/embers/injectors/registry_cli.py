@@ -20,8 +20,12 @@ def init(broker, **_):
 def list(gateway, device, **_):
     """ list registered devices """
 
+    selector = {}
+    if gateway: selector["event_type"] = gateway
+    if device:  selector["type"] = "device"
+
     api = config.get_broker_api()
-    ret = api.get_devices()
+    ret = api.get_devices(selector)
     for device in ret:
         line = "{uuid} {type}"
         line += " {event_type}" if device.has_key("event_type") else ""
