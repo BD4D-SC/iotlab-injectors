@@ -53,15 +53,20 @@ def register(gateway, device, **_):
 
 
 @command
-def unregister(uuid, **_):
+def unregister(uuid, gateway, **_):
     """ unregister specified device """
 
-    if not uuid:
-        print("please specify --uuid <uuid>")
+    selector = {}
+    if gateway: selector["event_type"] = gateway
+    if uuid:  selector["uuid"] = uuid
+
+    if not selector:
+        print("please specify --uuid <uuid> or --gateway <event type>")
         return 1
 
     api = config.get_broker_api()
-    ret = api.unregister_device(uuid)
+    for device in api.get_devices(selector):
+        ret = api.unregister_device(device["uuid"])
 
 
 def add_parameters(parser):
