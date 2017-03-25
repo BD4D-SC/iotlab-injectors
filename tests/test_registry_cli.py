@@ -48,7 +48,7 @@ def test_list_and_unregister_pollution_gw():
 
 
 def test_register_gw():
-    ret = run("registry --register --gateway pollution")
+    ret = run("registry --register --gateway --events pollution")
     uuid = ret.split()[1]
     registered.uuid = uuid
 
@@ -57,7 +57,7 @@ def test_register_gw():
 
 def test_register_gw_already_registered():
     with pytest.raises(Exception):
-        run("registry --register --gateway pollution")
+        run("registry --register --gateway --events pollution")
 
 
 def test_unregister_gw():
@@ -67,7 +67,7 @@ def test_unregister_gw():
 
 
 def test_register_unregister_device():
-    ret = run("registry --register --gateway pollution --device")
+    ret = run("registry --register --events pollution --device")
 
     uuid = ret.split()[1]
     run("registry --unregister --uuid " + uuid)
