@@ -17,11 +17,16 @@ def init(broker, **_):
 
 
 @command
-def list(gateway, device, **_):
+def list(events, device, gw, **_):
     """ list registered devices """
 
+    selector = {}
+    if events:  selector["event_type"] = events
+    if device:  selector["type"] = "device"
+    if gw:      selector["type"] = "gateway"
+
     api = config.get_broker_api()
-    ret = api.get_devices()
+    ret = api.get_devices(selector)
     for device in ret:
         line = "{uuid} {type}"
         line += " {event_type}" if device.has_key("event_type") else ""
@@ -49,15 +54,20 @@ def register(gateway, device, **_):
 
 
 @command
-def unregister(uuid, **_):
+def unregister(uuid, events, **_):
     """ unregister specified device """
 
-    if not uuid:
-        print("please specify --uuid <uuid>")
+    selector = {}
+    if events: selector["event_type"] = events
+    if uuid:   selector["uuid"] = uuid
+
+    if not selector:
+        print("please specify --uuid <uuid> or --events <event type>")
         return 1
 
     api = config.get_broker_api()
-    ret = api.unregister_device(uuid)
+    for device in api.get_devices(selector):
+        ret = api.unregister_device(device["uuid"])
 
 
 def add_parameters(parser):
@@ -78,9 +88,19 @@ def add_parameters(parser):
         help="device to unregister")
 
     parser.add_argument(
+        "--events",
+        choices=EVENTS.split(),
+        help="gateway|device type (events) to register")
+
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument(
         "--device",
         action="store_true",
         help="register a device (instead of a gateway)")
+    group.add_argument(
+        "--gw",
+        action="store_true",
+        help="register a gateway (optional, this is the default)")
 
 
 def main():

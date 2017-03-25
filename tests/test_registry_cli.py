@@ -81,7 +81,6 @@ def test_register_device_no_gw():
 
 
 def test_unregister_unexisting_device():
-    with pytest.raises(Exception):
         run("registry --unregister --uuid this-device-does-not-exist")
 
 
