@@ -43,3 +43,13 @@ def _register_device(metadata):
 def _lookup_devices(metadata):
     api = get_broker_api()
     return api.get_devices(metadata)
+
+
+def register_devices(event_type, nb_devices):
+    return [ register_device(event_type) for i in range(nb_devices) ]
+
+
+def unregister_devices(devices):
+    api = get_broker_api()
+    for device in devices:
+         api.unregister_device(device["uuid"])
