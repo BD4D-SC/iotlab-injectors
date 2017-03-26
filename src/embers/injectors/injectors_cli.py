@@ -38,13 +38,7 @@ def run(nb_devices, events, dataset, protocol, ev_per_hour, duration, **_):
         gateway = registry.register_gateway(events)
         print("==> registered gateway '{}'".format(events))
 
-    devices = registry.lookup_devices(events)
-    if nb_devices > len(devices):
-        more = nb_devices - len(devices)
-        devices += [ registry.register_device(events) for i in range(more) ]
-        print("==> registered {} more device{s}".format(more, s=s(more)))
-
-    devices = devices[:nb_devices]
+    devices = registry.register_devices(events, nb_devices)
 
     print("sending {} event{s}/h (per injector) for {} min.".format(
           ev_per_hour, duration, s=s(ev_per_hour)))
@@ -58,6 +52,7 @@ def run(nb_devices, events, dataset, protocol, ev_per_hour, duration, **_):
         return 1
     finally:
         stats.dump()
+        registry.unregister_devices(devices)
 
 
 @command

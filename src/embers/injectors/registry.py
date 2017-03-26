@@ -1,5 +1,6 @@
 from config import get_config
 from config import get_broker_api
+from parallel import parallel_run
 
 
 def GatewayMetadata(event_type):
@@ -43,3 +44,23 @@ def _register_device(metadata):
 def _lookup_devices(metadata):
     api = get_broker_api()
     return api.get_devices(metadata)
+
+
+def register_devices(event_type, nb_devices):
+    devices = []
+    def collect(thread):
+        devices.append(thread.device)
+    def run(x, thread):
+        thread.device = register_device(event_type)
+
+    parallel_run([1]*nb_devices, run, collect)
+    return devices
+
+
+def unregister_devices(devices):
+    api = get_broker_api()
+    def run(uuid, thread):
+        api.unregister_device(uuid)
+
+    devices = [ d["uuid"] for d in devices ]
+    parallel_run(devices, run)
