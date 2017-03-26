@@ -66,8 +66,8 @@ def unregister(uuid, events, **_):
         return 1
 
     api = config.get_broker_api()
-    for device in api.get_devices(selector):
-        ret = api.unregister_device(device["uuid"])
+    devices = api.get_devices(selector)
+    registry.unregister_devices(devices)
 
 
 def add_parameters(parser):
