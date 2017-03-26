@@ -36,8 +36,12 @@ def send_next_events(senders, data_source):
     for i, sender in enumerate(senders):
         event = data_source.get_source(i).next()
         sender.send(event)
+    error = None
     for sender in senders:
         sender.join()
+        error = error or sender.error
+    if error:
+        raise error
 
 
 class EventSender:
@@ -48,10 +52,14 @@ class EventSender:
         self.client = self.protocol(broker)
         self.client.auth = (device["uuid"], device["token"])
         self.gateway = gateway["uuid"]
+        self.error = None
 
     def send(self, event):
         def run():
-            self.client.publish(self.gateway, event)
+            try:
+                self.client.publish(self.gateway, event)
+            except Exception as e:
+                self.error = e
         self.thread = threading.Thread(target=run)
         self.thread.start()
 
