@@ -52,7 +52,10 @@ def run(nb_devices, events, dataset, protocol, ev_per_hour, duration, **_):
         return 1
     finally:
         stats.dump()
-        registry.unregister_devices(devices)
+        try:
+            registry.unregister_devices(devices)
+        except:
+            pass
 
 
 @command
