@@ -10,7 +10,6 @@ from datasets import get_dataset
 def run(devices, gateway, dataset, protocol, ev_per_hour, duration, stats):
     EventSender.protocol = import_client(protocol)
     data_source = get_dataset(dataset, event_type=gateway["event_type"])
-    devices = reset_devices(devices)
     senders = [ EventSender(gateway, device) for device in devices ]
     _run(senders, data_source, duration, ev_per_hour, stats)
 
@@ -31,11 +30,6 @@ def _run(senders, data_source, duration, ev_per_hour, stats):
         stats.nb_loops += 1
         stats.end_time = t2
         time.sleep(sleep_time)
-
-
-def reset_devices(devices):
-    api = config.get_broker_api()
-    return [ api.reset_token(device["uuid"]) for device in devices ]
 
 
 def send_next_events(senders, data_source):
