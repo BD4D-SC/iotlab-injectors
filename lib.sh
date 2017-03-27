@@ -100,7 +100,13 @@ log_trace() {
 	set +x
 } &>/dev/null
 
+init_ssh_mux() {
+	ssh $IOTLAB_SITE.iot-lab.info -O exit &>/dev/null || true
+	ssh $IOTLAB_SITE.iot-lab.info id >/dev/null
+}
+
 init() {
 	init_exit_trap
 	log_trace set_params $@
+	init_ssh_mux
 }
