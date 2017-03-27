@@ -49,11 +49,8 @@ def run(nb_devices, events, dataset, protocol, ev_per_hour, duration, **_):
         print("fatal: {}".format(e))
         return 2
     finally:
+        unregister_devices(devices)
         stats.dump()
-        try:
-            registry.unregister_devices(devices)
-        except:
-            pass
 
 
 def register_devices(events, nb_devices):
@@ -65,6 +62,13 @@ def register_devices(events, nb_devices):
     devices = registry.register_devices(events, nb_devices)
 
     return gateway, devices
+
+
+def unregister_devices(devices):
+    try:
+        registry.unregister_devices(devices)
+    except:
+        print("failed to unregister devices")
 
 
 @command
