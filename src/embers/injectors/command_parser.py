@@ -40,7 +40,11 @@ def _add_commands(parser):
 
 def _run_command(opts):
     args = opts.__dict__
-    return command.func[opts.command](**args)
+    try:
+        return command.func[opts.command](**args)
+    except Exception as e:
+        print("fatal: {}".format(e))
+        sys.exit(3)
 
 
 def _init_func():
