@@ -54,12 +54,14 @@ def register(events, device, **_):
 
 
 @command
-def unregister(uuid, events, **_):
+def unregister(uuid, events, device, gateway, **_):
     """ unregister specified device """
 
     selector = {}
     if events: selector["event_type"] = events
     if uuid:   selector["uuid"] = uuid
+    if device:  selector["type"] = "device"
+    if gateway: selector["type"] = "gateway"
 
     if not selector:
         print("please specify --uuid <uuid> or --events <event type>")
