@@ -99,7 +99,7 @@ animated_wait() {
 			printf "\r%-30s   %c  " $func $c
 			sleep .3
 		done
-	 done
+	done
 }
 
 _() {
