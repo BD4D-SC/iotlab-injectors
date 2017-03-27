@@ -50,6 +50,9 @@ def run(nb_devices, events, dataset, protocol, ev_per_hour, duration, **_):
                      ev_per_hour, duration, stats)
     except KeyboardInterrupt:
         return 1
+    except Exception as e:
+        print("fatal: {}".format(e))
+        return 2
     finally:
         stats.dump()
         try:
