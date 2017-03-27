@@ -43,13 +43,15 @@ get_nodes() {
 }
 
 wait_for_boot() {
-	for node in $nodes; do
-		(while ! check_ssh_access; do
-			[ $[nb_fail++] -gt 25 ] && exit 1
-			sleep 1
-		 done) &
+	time_start=`date +%s`
+	while true; do
+		nb_booted=`get_booted_nodes | wc -l`
+		time_diff=$[`date +%s` - time_start]
+		[ $nb_booted = $NB_NODES ] && break
+		[ $time_diff -gt 80 ] && break
+		#echo "nb_booted=$nb_booted time_diff=$time_diff"
+		sleep 1
 	done
-	wait
 }
 
 get_booted_nodes() {
