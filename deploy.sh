@@ -86,7 +86,9 @@ run_injectors() {
 	for node in $nodes; do
 		ssh $node injectors --run &
 	done
-	wait
+	for pid in `jobs -p`; do
+		wait $pid
+	done
 }
 
 check_ssh_access() {
