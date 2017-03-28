@@ -46,6 +46,11 @@ check_ssh_access() {
 	ssh $node -o ConnectTimeout=2 id &>/dev/null
 }
 
+get_running_exp_ids() {
+	experiment-cli get -l --state Running \
+	| awk '/"id":/ {print $2}' | tr -d ,
+}
+
 animated_wait() {
 	while true; do
 		for c in . o O 0 O o; do
