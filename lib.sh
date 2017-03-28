@@ -51,6 +51,28 @@ get_running_exp_ids() {
 	| awk '/"id":/ {print $2}' | tr -d ,
 }
 
+check_exp_id() {
+	running_exp_ids=`get_running_exp_ids`
+	if [ -z "$running_exp_ids" ]; then
+		echo "no running experiment"
+		exit 1
+	fi
+	if [ `wc -w <<< "${running_exp_ids}"` = 1 ]; then
+		exp_id=$running_exp_ids
+		return 0
+	fi
+	if [ ! "$exp_id" ]; then
+		echo "please use 'exp_id=<id> $0 ...'"
+		echo "select <id> in:" $running_exp_ids
+		exit 1
+	fi
+	for id in $running_exp_ids; do
+		[ "$exp_id" = $id ] && return 0
+	done
+	echo "exp_id '$exp_id' is not a running experiment"
+	exit 1
+}
+
 animated_wait() {
 	while true; do
 		for c in . o O 0 O o; do
