@@ -21,7 +21,6 @@ main() {
 	check_nb_nodes
 
 	_ deploy_injectors
-	_ run_injectors
 }
 
 deploy_node() {
@@ -45,15 +44,6 @@ deploy_injectors() {
 	node=`head -1 <<<"$nodes"`
 	deploy_node &> /dev/null
 	configure_node
-}
-
-run_injectors() {
-	for node in $nodes; do
-		ssh $node injectors --run &
-	done
-	for pid in `jobs -p`; do
-		wait $pid
-	done
 }
 
 
