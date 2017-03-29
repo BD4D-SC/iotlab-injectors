@@ -27,5 +27,16 @@ Dev install
 Testing it works
 ----------------
 
+assuming you have a locally running Meshblu:
+
 	pip install pytest
 	pytest -v
+
+
+assuming you have a configured IoT-LAB account:
+
+	./init-ssh-config.sh
+	./deploy.sh
+	./run.sh
+
+	tail -f {deploy,run}.sh.log   # (in a separate terminal)
