@@ -105,6 +105,12 @@ init_ssh_mux() {
 	}
 }
 
+sanity_check_params() {
+	[ "$IOTLAB_SITE" ] || fatal "IOTLAB_SITE is not defined"
+	[ "$NB_NODES" ] || fatal "NB_NODES is not defined"
+	[ "$DURATION" ] || fatal "DURATION is not defined"
+}
+
 fatal() {
 	echo "FATAL: $*" | tee -a $LOG >&2
 	exit 1
@@ -112,6 +118,7 @@ fatal() {
 
 init() {
 	log_trace set_params $@
+	sanity_check_params
 	init_ssh_mux
 	init_exit_trap
 }
