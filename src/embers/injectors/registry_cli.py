@@ -88,10 +88,15 @@ def add_parameters(parser):
         metavar="<address>",
         help="broker to use as destination [%(default)s]")
 
-    parser.add_argument(
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument(
         "--uuid",
         metavar="<uuid>",
         help="device to unregister")
+    group.add_argument(
+        "--root-auth",
+        action="store_true",
+        help="unregister all root-auth devices (but local one)")
 
     parser.add_argument(
         "--events",
