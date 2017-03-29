@@ -73,6 +73,15 @@ check_exp_id() {
 	exit 1
 }
 
+init_nodes() {
+	check_exp_id
+	nodes=`get_nodes`
+	nodes=`get_booted_nodes`
+
+	nb_nodes=`wc -w <<< "$nodes"`
+	IOTLAB_SITE=`head -1 <<<"$nodes" | awk -F . '{print $2}'`
+}
+
 animated_wait() {
 	while true; do
 		for c in . o O 0 O o; do
