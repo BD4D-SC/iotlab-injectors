@@ -7,8 +7,6 @@ set_params() {
 	NB_NODES=${1:-2}
 	DURATION=${2:-5}
 	IOTLAB_SITE=${3:-grenoble}
-
-	BROKER=${BROKER:-meshblu.octoblu.com}
 }
 
 start_experiment() {
