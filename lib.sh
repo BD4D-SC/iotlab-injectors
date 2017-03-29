@@ -7,8 +7,6 @@ set_params() {
 	NB_NODES=${1:-2}
 	DURATION=${2:-5}
 	IOTLAB_SITE=${3:-grenoble}
-
-	BROKER=${BROKER:-meshblu.octoblu.com}
 }
 
 start_experiment() {
@@ -102,11 +100,25 @@ log_trace() {
 
 init_ssh_mux() {
 	ssh $IOTLAB_SITE.iot-lab.info -O exit &>/dev/null || true
-	ssh $IOTLAB_SITE.iot-lab.info id >/dev/null
+	ssh $IOTLAB_SITE.iot-lab.info id &>/dev/null || {
+		fatal "failed to connect to $IOTLAB_SITE.iot-lab.info"
+	}
+}
+
+sanity_check_params() {
+	[ "$IOTLAB_SITE" ] || fatal "IOTLAB_SITE is not defined"
+	[ "$NB_NODES" ] || fatal "NB_NODES is not defined"
+	[ "$DURATION" ] || fatal "DURATION is not defined"
+}
+
+fatal() {
+	echo "FATAL: $*" | tee -a $LOG >&2
+	exit 1
 }
 
 init() {
-	init_exit_trap
 	log_trace set_params $@
+	sanity_check_params
 	init_ssh_mux
+	init_exit_trap
 }
