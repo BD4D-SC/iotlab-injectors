@@ -111,7 +111,7 @@ on_error() {
 }
 
 init_exit_trap() {
-	exec 3>&1
+	exec 3>&2
 	trap '[ $? = 0 ] || on_error >&3' EXIT
 }
 
