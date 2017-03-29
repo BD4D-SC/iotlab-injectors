@@ -53,7 +53,7 @@ get_running_exp_ids() {
 
 check_exp_id() {
 	running_exp_ids=`get_running_exp_ids`
-	if [ -z "$running_exp_ids" ]; then
+	if [ ! "$running_exp_ids" ]; then
 		echo "no running experiment"
 		exit 1
 	fi
@@ -111,7 +111,7 @@ on_error() {
 }
 
 init_exit_trap() {
-	exec 3>&1
+	exec 3>&2
 	trap '[ $? = 0 ] || on_error >&3' EXIT
 }
 

@@ -1,4 +1,4 @@
-#!/bon/bash
+#!/bin/bash
 
 cat >> $HOME/.ssh/config << EOT
 Host a8-*
