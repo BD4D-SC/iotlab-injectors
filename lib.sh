@@ -113,7 +113,7 @@ fatal() {
 }
 
 init() {
-	init_exit_trap
 	log_trace set_params $@
 	init_ssh_mux
+	init_exit_trap
 }
