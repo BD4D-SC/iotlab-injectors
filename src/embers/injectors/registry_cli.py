@@ -54,8 +54,11 @@ def register(events, device, **_):
 
 
 @command
-def unregister(uuid, events, device, gateway, **_):
+def unregister(uuid, events, device, gateway, root_auth, **_):
     """ unregister specified device """
+
+    if root_auth:
+        return unregister_root_auths()
 
     selector = {}
     if events: selector["event_type"] = events
@@ -72,16 +75,28 @@ def unregister(uuid, events, device, gateway, **_):
     registry.unregister_devices(devices)
 
 
+def unregister_root_auths():
+    api = config.get_broker_api()
+    devices = api.get_devices({"type": "root_auth"})
+    devices = [ dev for dev in devices if dev["uuid"] != api.auth[0] ]
+    registry.unregister_devices(devices)
+
+
 def add_parameters(parser):
     parser.add_argument(
         "--broker",
         metavar="<address>",
         help="broker to use as destination [%(default)s]")
 
-    parser.add_argument(
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument(
         "--uuid",
         metavar="<uuid>",
         help="device to unregister")
+    group.add_argument(
+        "--root-auth",
+        action="store_true",
+        help="unregister all root-auth devices (but local one)")
 
     parser.add_argument(
         "--events",
