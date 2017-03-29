@@ -102,7 +102,14 @@ log_trace() {
 
 init_ssh_mux() {
 	ssh $IOTLAB_SITE.iot-lab.info -O exit &>/dev/null || true
-	ssh $IOTLAB_SITE.iot-lab.info id >/dev/null
+	ssh $IOTLAB_SITE.iot-lab.info id &>/dev/null || {
+		fatal "failed to connect to $IOTLAB_SITE.iot-lab.info"
+	}
+}
+
+fatal() {
+	echo "FATAL: $*" | tee -a $LOG >&2
+	exit 1
 }
 
 init() {
