@@ -82,6 +82,19 @@ def unregister_root_auths():
     registry.unregister_devices(devices)
 
 
+@command
+def reset(uuid, **_):
+    """ reset specified device token """
+
+    if not uuid:
+        print("please specify --uuid <uuid>")
+        return 1
+
+    api = config.get_broker_api()
+    ret = api.reset_token(uuid)
+    print("token: " + ret["token"])
+
+
 def add_parameters(parser):
     parser.add_argument(
         "--broker",
