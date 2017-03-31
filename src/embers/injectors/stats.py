@@ -10,7 +10,7 @@ class stats:
 
 def dump_stats(stats):
     nb_sent = stats.nb_sent
-    duration = stats.end_time - stats.start_time
+    duration = stats.end_time - stats.start_time if stats.end_time else 0
     print("total: {} event{s} sent in {:.1f} sec.".format(
           nb_sent, duration, s="s" if nb_sent != 1 else ""))
 
