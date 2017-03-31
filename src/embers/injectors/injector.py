@@ -21,24 +21,24 @@ def _run(senders, data_source, duration, ev_per_hour, stats):
     stats.nb_devices = len(senders)
     while end_time > time.time():
         t1 = time.time()
-        send_next_events(senders, data_source)
+        send_next_events(senders, data_source, stats)
         t2 = time.time()
         sleep_time = 3600./ev_per_hour - t2 + t1
         if sleep_time < 0:
             stats.time_overflow.append(-sleep_time)
             sleep_time = 0
-        stats.nb_loops += 1
         stats.end_time = t2
         time.sleep(sleep_time)
 
 
-def send_next_events(senders, data_source):
+def send_next_events(senders, data_source, stats):
     for i, sender in enumerate(senders):
         event = data_source.get_source(i).next()
         sender.send(event)
     error = None
     for sender in senders:
         sender.join()
+        stats.nb_sent += 1 if not sender.error else 0
         error = error or sender.error
     if error:
         raise error
