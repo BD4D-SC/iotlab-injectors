@@ -27,6 +27,8 @@ def _run(senders, data_source, duration, ev_per_hour, stats):
         if sleep_time < 0:
             stats.time_overflow.append(-sleep_time)
             sleep_time = 0
+        if sleep_time + t2 > end_time:
+            sleep_time = end_time - t2 if end_time > t2 else 0
         stats.end_time = t2
         time.sleep(sleep_time)
 
