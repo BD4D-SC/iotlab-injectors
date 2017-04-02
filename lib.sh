@@ -53,24 +53,19 @@ get_running_exp_ids() {
 
 check_exp_id() {
 	running_exp_ids=`get_running_exp_ids`
-	if [ ! "$running_exp_ids" ]; then
-		echo "no running experiment"
-		exit 1
-	fi
-	if [ `wc -w <<< "${running_exp_ids}"` = 1 ]; then
-		exp_id=$running_exp_ids
-		return 0
-	fi
-	if [ ! "$exp_id" ]; then
-		echo "please use 'exp_id=<id> $0 ...'"
-		echo "select <id> in:" $running_exp_ids
-		exit 1
-	fi
-	for id in $running_exp_ids; do
-		[ "$exp_id" = $id ] && return 0
-	done
-	echo "exp_id '$exp_id' is not a running experiment"
-	exit 1
+	[ "$running_exp_ids" ] || {
+		echo "no running experiment" && exit 1
+	} >&2
+	[ "$exp_id" ] && {
+		[ grep -qF "$exp_id" <<< "$running_exp_ids" ] && return 0
+		echo "no such running experiment: $exp_id" && exit 1
+	} >&2
+	exp_id=`head -1 <<< "$running_exp_ids"`
+	[ "$exp_id" == "$running_exp_ids" ] || {
+		echo "more than one experiment running"
+		echo "use e.g. 'exp_id=<id> $0 ...'"
+		echo "select <id> in:" $running_exp_ids && exit 1
+	} >&2
 }
 
 init_nodes() {
