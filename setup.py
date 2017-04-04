@@ -20,6 +20,7 @@ setup(
             "injectors = "+PACKAGE+".injectors_cli:main",
             "registry = "+PACKAGE+".registry_cli:main",
             "subscriber = "+PACKAGE+".subscriber:main",
+            "datasets = "+PACKAGE+".datasets_cli:main",
         ],
     },
     namespace_packages = ["embers", PACKAGE],
