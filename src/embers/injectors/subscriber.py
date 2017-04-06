@@ -25,6 +25,7 @@ def main():
     sub = subscriber.get_subscriber(gw["uuid"])
     sub.on_message = on_message
     sub.on_subscribe = on_subscribe
+    sub.opts = opts
     sub.connect(broker_address, gw["token"])
     try:
         sub.loop_forever()
@@ -34,7 +35,10 @@ def main():
 
 
 def on_message(sub, message):
-    print(sub.message_count)
+    if sub.opts.print_events:
+        print(message.payload)
+    if sub.opts.print_count:
+        print(sub.message_count)
 
 
 def on_subscribe(sub):
