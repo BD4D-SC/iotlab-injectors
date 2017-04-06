@@ -32,6 +32,7 @@ def main():
     except KeyboardInterrupt:
         pass
     sub.disconnect()
+    print("total messages: {}".format(sub.message_count))
 
 
 def on_message(sub, message):
