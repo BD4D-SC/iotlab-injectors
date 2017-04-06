@@ -77,7 +77,7 @@ def test_register_device_no_gw():
     with pytest.raises(Exception) as e:
         run("registry --register --device")
 
-        assert "please specify --gateway" in e.output
+    assert "please specify --events" in e.value.output
 
 
 def test_unregister_unexisting_device():
