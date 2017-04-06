@@ -25,3 +25,15 @@ def test_citypulse_traffic_download():
 
     assert "vehicleCount" in d
     assert "avgSpeed" in d
+
+
+def test_citypulse_pollution_download():
+    run("datasets --download --dataset citypulse --event pollution")
+
+    import embers.datasets.citypulse.pollution as pollution
+    t = pollution.Pollution()
+    s = t.get_source(0)
+    d = s.next()
+
+    assert "carbon_monoxide" in d
+    assert "nitrogen_dioxide" in d
