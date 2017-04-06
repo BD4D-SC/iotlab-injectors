@@ -1,3 +1,5 @@
+import pytest
+
 from runner import run
 
 
@@ -37,3 +39,17 @@ def test_citypulse_pollution_download():
 
     assert "carbon_monoxide" in d
     assert "nitrogen_dioxide" in d
+
+
+def test_synthetic_download_fails():
+    with pytest.raises(Exception) as e:
+        run("datasets --download --dataset synthetic --event traffic")
+
+    assert "no attribute 'download'" in e.value.output
+
+
+def test_datasets_no_events():
+    with pytest.raises(Exception) as e:
+        run("datasets --download --dataset citypulse")
+
+    assert "please specify --" in e.value.output

@@ -1,11 +1,10 @@
 import subprocess
-import pytest
 
 
 def run(cmd):
     cmd = cmd.split()
     try:
-        return subprocess.check_output(cmd)
+        return subprocess.check_output(cmd,
+                   stderr=subprocess.STDOUT)
     except Exception as e:
-        print(e.output)
-        pytest.fail(e)
+        raise e
