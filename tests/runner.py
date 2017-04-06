@@ -8,4 +8,4 @@ def run(cmd):
         return subprocess.check_output(cmd)
     except Exception as e:
         print(e.output)
-        pytest.fail(e)
+        raise e
