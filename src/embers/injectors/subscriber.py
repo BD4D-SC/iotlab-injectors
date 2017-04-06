@@ -9,7 +9,8 @@ from injectors_cli import EVENTS as gateway_types
 
 
 def main():
-    gw_type = parse_args(choices=gateway_types)
+    opts = parse_args()
+    gw_type = opts.command
 
     broker_address = config.get_config().broker_address
 
@@ -40,12 +41,21 @@ def on_subscribe(sub):
     print("subscribed to: " + sub.target_uuid)
 
 
-def parse_args(choices):
+def parse_args():
     parser = Parser()
-    for cmd in choices.split():
+    for cmd in gateway_types.split():
         parser.add_command(cmd)
+
+    parser.add_argument(
+        "--print-events",
+        choices="yes no".split(),)
+
+    parser.add_argument(
+        "--print-count",
+        choices="yes no".split(),)
+
     opts = parser.parse_args()
     if not opts.command:
         parser.print_usage()
         parser.exit(0)
-    return opts.command
+    return opts
