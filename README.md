@@ -13,30 +13,30 @@ Install
 	pip install .
 
 
-Dev install
------------
+Testing it works (manual, quick check)
+--------------------------------------
 
-	mkvirtualenv embers-dev
-	cd ../embers-datasets/ && pip install -e .
-	cd ../meshblu-clients/ && pip install -e .
-	pip install -r requirements.txt
-	cd ../iotlab-injectors/
-	pip install -e .
+	registry --init --broker meshblu.octoblu.com
+	injectors --run
 
-
-Testing it works
-----------------
-
-assuming you have a locally running Meshblu:
-
-	pip install pytest
-	pytest -v
+	subscriber --traffic --print-event yes   # (in separate terminal)
+	injectors --run
 
 
-assuming you have a configured IoT-LAB account:
+Testing it works (with your IoT-LAB account)
+--------------------------------------------
+
+this assumes you have a configured IoT-LAB account
+
 
 	./init-ssh-config.sh
 	./deploy.sh
 	./run.sh
 
 	tail -f {deploy,run}.sh.log   # (in a separate terminal)
+
+
+Downloading additional datasets
+-------------------------------
+
+	datasets --download --dataset citypulse --event traffic
