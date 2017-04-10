@@ -4,7 +4,7 @@ import threading
 import time
 
 from stats import stats
-from datasets import get_dataset
+from embers.datasets.lib.lookup import get_dataset
 
 
 def run(devices, gateway, dataset, protocol, ev_per_hour, duration, stats):
