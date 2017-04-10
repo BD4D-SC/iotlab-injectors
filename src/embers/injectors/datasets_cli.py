@@ -20,7 +20,21 @@ def download(dataset, event_type, **_):
 def list(**_):
     """ list available datasets """
     for ds in datasets.get_datasets():
-        print(ds)
+        events = get_supported_events(ds)
+        output = ds
+        if events: output += " %s" % ":".join(events)
+        print(output)
+
+
+def get_supported_events(dataset):
+    events = []
+    for ev in EVENTS.split():
+        try:
+            ds = datasets.get_dataset(dataset, ev)
+            events.append(ev)
+        except Exception:
+            pass
+    return events
 
 
 def add_parameters(parser):
