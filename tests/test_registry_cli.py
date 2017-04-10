@@ -66,10 +66,14 @@ def test_unregister_gw():
     assert registered.uuid not in run("registry --list")
 
 
-def test_register_unregister_device():
+def test_register_list_unregister_device():
     ret = run("registry --register --events pollution --device")
 
     uuid = ret.split()[1]
+    ret = run("registry --list --device")
+
+    assert uuid in ret
+
     run("registry --unregister --uuid " + uuid)
 
 

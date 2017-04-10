@@ -5,6 +5,12 @@ def test_package_import():
     import embers.injectors
 
 
+def test_config_not_found(tmpdir, monkeypatch, config):
+    monkeypatch.chdir(tmpdir)
+    with pytest.raises(SystemExit):
+        config.reload()
+
+
 @pytest.fixture
 def config():
     from embers.injectors.config import get_config
