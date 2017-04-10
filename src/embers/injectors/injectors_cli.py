@@ -3,7 +3,7 @@ from command_parser import Parser
 
 import registry
 import injector
-import datasets
+import embers.datasets.lib.lookup as datasets
 
 
 DEFAULTS = {

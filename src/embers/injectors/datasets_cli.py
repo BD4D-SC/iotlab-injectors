@@ -1,7 +1,7 @@
 from command_parser import Parser, command
 from injectors_cli import EVENTS
 
-import datasets
+import embers.datasets.lib.lookup as datasets
 
 
 @command
