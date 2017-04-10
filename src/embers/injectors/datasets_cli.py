@@ -21,8 +21,11 @@ def list(**_):
     """ list available datasets """
     for ds in datasets.get_datasets():
         events = get_supported_events(ds)
+        states = get_download_states(ds, events)
+        states = "".join(states)
         output = ds
         if events: output += " %s" % ":".join(events)
+        if states: output += " [%s]" % states
         print(output)
 
 
@@ -35,6 +38,18 @@ def get_supported_events(dataset):
         except Exception:
             pass
     return events
+
+
+def get_download_states(dataset, events):
+    states = []
+    for ev in events:
+        ds = datasets.get_dataset(dataset, ev)
+        if hasattr(ds, "is_downloaded"):
+            state = "D" if ds.is_downloaded() else "_"
+        else:
+            state = ""
+        states.append(state)
+    return states
 
 
 def add_parameters(parser):
