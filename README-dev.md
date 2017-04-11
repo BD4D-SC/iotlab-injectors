@@ -21,7 +21,7 @@ Dev install
 Installing a local instance of Meshblu
 --------------------------------------
 
-	git clone git@github.com:iot-lab/iotlab-injectors.git
+	git clone git@github.com:iot-lab/meshblu.git
 
 	meshblu/install.sh docker
 	# logout/login or reboot as needed
@@ -54,7 +54,7 @@ Testing it works (with your IoT-LAB account)
 	./deploy.sh
 	./run.sh
 
-	tail -f {deploy,run}.sh.log   # (in a separate terminal)
+	tail -f {deploy,run}.sh.log   # (in separate terminal)
 
 
 Downloading additional datasets
@@ -62,3 +62,10 @@ Downloading additional datasets
 
 	datasets --list
 	datasets --download --dataset citypulse --event traffic
+
+
+Running code coverage report
+----------------------------
+
+	pip install pytest-cov
+	pytest --cov src/ --cov-report term-missing
