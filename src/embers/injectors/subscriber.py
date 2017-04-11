@@ -40,6 +40,9 @@ def on_message(sub, message):
         print(message.payload)
     if sub.opts.print_count:
         print(sub.message_count)
+    if sub.opts.exit_after:
+        if sub.message_count >= sub.opts.exit_after:
+            sub.disconnect()
 
 
 def on_subscribe(sub):
@@ -58,6 +61,12 @@ def parse_args():
     parser.add_argument(
         "--print-count",
         choices="yes no".split(),)
+
+    parser.add_argument(
+        "--exit-after",
+        metavar="<nb events>",
+        type=int,
+    )
 
     opts = parser.parse_args()
     if not opts.command:
