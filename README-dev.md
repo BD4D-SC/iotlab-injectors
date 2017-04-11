@@ -54,7 +54,7 @@ Testing it works (with your IoT-LAB account)
 	./deploy.sh
 	./run.sh
 
-	tail -f {deploy,run}.sh.log   # (in a separate terminal)
+	tail -f {deploy,run}.sh.log   # (in separate terminal)
 
 
 Downloading additional datasets
