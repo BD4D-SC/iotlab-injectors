@@ -62,3 +62,10 @@ Downloading additional datasets
 
 	datasets --list
 	datasets --download --dataset citypulse --event traffic
+
+
+Running code coverage report
+----------------------------
+
+	pip install pytest-cov
+	pytest --cov src/ --cov-report term-missing
