@@ -56,11 +56,11 @@ def parse_args():
 
     parser.add_argument(
         "--print-events",
-        choices="yes no".split(),)
+        action="store_true")
 
     parser.add_argument(
         "--print-count",
-        choices="yes no".split(),)
+        action="store_true")
 
     parser.add_argument(
         "--exit-after",
