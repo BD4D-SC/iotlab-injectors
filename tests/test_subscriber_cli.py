@@ -24,7 +24,7 @@ def test_subscriber_auto_register_print_all():
 
     def subscriber():
         out.text = run("subscriber --traffic --exit-after 2 \
-                       --print-count yes --print-event yes")
+                       --print-count --print-event")
 
     def injector():
         time.sleep(0.5)  # let subscriber start first, so it registers
