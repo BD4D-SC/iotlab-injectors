@@ -19,7 +19,7 @@ Testing it works (manual, quick check)
 	registry --init --broker meshblu.octoblu.com
 	injectors --run
 
-	subscriber --traffic --print-event yes   # (in separate terminal)
+	subscriber --traffic --print-event   # (in separate terminal)
 	injectors --run
 
 

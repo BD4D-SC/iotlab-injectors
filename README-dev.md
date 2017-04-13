@@ -36,7 +36,7 @@ Checking it works (local, manual, quick check)
 	registry --init
 	injectors --run
 
-	subscriber --pollution --print-event yes  # (in separate terminal)
+	subscriber --pollution --print-event  # (in separate terminal)
 	injectors --run --event pollution
 
 
