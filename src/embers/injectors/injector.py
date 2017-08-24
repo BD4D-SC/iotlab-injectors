@@ -7,9 +7,11 @@ from stats import stats
 from embers.datasets.lib.lookup import get_dataset
 
 
-def run(devices, gateway, dataset, protocol, ev_per_hour, duration, stats):
+def run(devices, gateway, dataset, protocol, ev_per_hour, duration,
+        offset, stats):
     EventSender.protocol = import_client(protocol)
     data_source = get_dataset(dataset, event_type=gateway["event_type"])
+    data_source.offset = offset
     senders = [ EventSender(gateway, device) for device in devices ]
     _run(senders, data_source, duration, ev_per_hour, stats)
 
@@ -35,7 +37,7 @@ def _run(senders, data_source, duration, ev_per_hour, stats):
 
 def send_next_events(senders, data_source, stats):
     for i, sender in enumerate(senders):
-        event = data_source.get_source(i).next()
+        event = data_source.get_source(i + data_source.offset).next()
         sender.send(event)
     error = None
     for sender in senders:
