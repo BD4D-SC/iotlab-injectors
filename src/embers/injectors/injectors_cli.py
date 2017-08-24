@@ -13,6 +13,7 @@ DEFAULTS = {
     "ev_per_hour": 3600,
     "duration": .1,
     "dataset": "synthetic",
+    "offset": "0",
     "broker": "127.0.0.1",
 }
 
@@ -27,7 +28,8 @@ def main():
 
 
 @command
-def run(nb_devices, events, dataset, protocol, ev_per_hour, duration, **_):
+def run(nb_devices, events, dataset, protocol, ev_per_hour, duration,
+        offset, **_):
     """ run <nb> injectors on local node """
 
     print("running {nb} '{}+{}' injector{s} on local node".format(
@@ -42,7 +44,7 @@ def run(nb_devices, events, dataset, protocol, ev_per_hour, duration, **_):
 
     try:
         injector.run(devices, gateway, dataset, protocol,
-                     ev_per_hour, duration, stats)
+                     ev_per_hour, duration, offset, stats)
     except KeyboardInterrupt:
         return 1
     except Exception as e:
@@ -109,6 +111,11 @@ def add_params(parser):
         "--nb-devices", type=int,
         metavar="<nb>",
         help="number of devices to operate   [%(default)s]")
+
+    parser.add_argument(
+        "--offset", type=int,
+        metavar="<nb>",
+        help="offset in dataset for devices  [%(default)s]")
 
     parser.add_argument(
         "--ev-per-hour", type=int,
