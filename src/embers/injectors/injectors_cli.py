@@ -17,7 +17,7 @@ DEFAULTS = {
     "broker": "127.0.0.1",
 }
 
-PROTOCOLS = "http mqtt coap"
+PROTOCOLS = "http mqtt coap https"
 
 EVENTS = "parking traffic pollution"
 
