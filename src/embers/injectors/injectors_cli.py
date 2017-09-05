@@ -15,6 +15,7 @@ DEFAULTS = {
     "dataset": "synthetic",
     "offset": "0",
     "broker": "127.0.0.1",
+    "insecure": False,
 }
 
 PROTOCOLS = "http mqtt coap https"
@@ -29,7 +30,7 @@ def main():
 
 @command
 def run(nb_devices, events, dataset, protocol, ev_per_hour, duration,
-        offset, **_):
+        offset, insecure, **_):
     """ run <nb> injectors on local node """
 
     print("running {nb} '{}+{}' injector{s} on local node".format(
@@ -100,6 +101,7 @@ def create_parser():
     add_datasets(parser)
     add_events(parser)
     add_protocols(parser)
+    add_options(parser)
 
     parser.set_defaults(**DEFAULTS)
 
@@ -155,3 +157,19 @@ def add_datasets(parser):
         "--dataset",
         choices=choices,
         help="dataset to use as events source [%(default)s]")
+
+
+def add_options(parser):
+    parser.add_argument(
+        "--insecure",
+        action=InsecureAction,
+        nargs=0,
+        help="do not check server certificate [%(default)s]")
+
+import argparse
+class InsecureAction(argparse.Action):
+    def __call__(self, parser, namespace, values, option_string=None):
+        import embers.meshblu.https as https
+        https.set_insecure()
+
+        setattr(namespace, self.dest, values)
