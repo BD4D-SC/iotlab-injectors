@@ -1,6 +1,7 @@
 import config
 
 import threading
+import Queue
 import time
 
 from stats import stats
@@ -49,6 +50,7 @@ def send_next_events(senders, data_source, stats):
 
 
 class EventSender:
+    queue = Queue.Queue()
 
     def __init__(self, gateway, device):
         assert self.protocol
@@ -60,15 +62,21 @@ class EventSender:
 
     def send(self, event):
         def run():
+            self.queue.put(True)
             try:
                 self.client.publish(self.gateway, event)
             except Exception as e:
                 self.error = e
+            self.queue.get()
         self.thread = threading.Thread(target=run)
         self.thread.start()
 
     def join(self):
         self.thread.join()
+
+    @classmethod
+    def set_max_threads(self, nb_threads):
+        self.queue = Queue.Queue(nb_threads)
 
 
 def import_client(protocol):
