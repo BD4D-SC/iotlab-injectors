@@ -172,8 +172,14 @@ def add_options(parser):
         nargs=0,
         help="use FiWare data format for payload [%(default)s]")
 
+    parser.add_argument(
+        "--max-threads",
+        action=MaxThreadsAction,
+        help="use at most specified nb of threads [no limit]")
+
 
 import argparse
+
 class InsecureAction(argparse.Action):
     def __call__(self, parser, namespace, values, option_string=None):
         import embers.meshblu.https as https
@@ -187,3 +193,7 @@ class UseFiwareAction(argparse.Action):
         datasets.use_fiware_format = True
 
         setattr(namespace, self.dest, values)
+
+class MaxThreadsAction(argparse.Action):
+    def __call__(self, parser, namespace, values, option_string=None):
+        injector.EventSender.set_max_threads(int(values))
