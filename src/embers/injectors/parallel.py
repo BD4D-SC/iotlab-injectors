@@ -1,4 +1,5 @@
 import threading
+import Queue
 MAX_THREADS = 100
 
 def parallel_run(params, run, collect=lambda th:th):
@@ -6,28 +7,28 @@ def parallel_run(params, run, collect=lambda th:th):
         def run(self):
             try:
                 run(self.param, self)
+                collect(self)
             except Exception as e:
                 self.error = e
+            queue.get()
+
+    queue = Queue.Queue(MAX_THREADS)
 
     t = []
     for param in params:
+        queue.put(True)
         th = runner()
         th.param = param
         th.error = None
         th.start()
         t.append(th)
-        if len(t) == MAX_THREADS:
-            join_all(t, collect)
-    join_all(t, collect)
+    join_all(t)
 
 
-def join_all(t, func=lambda th:th):
+def join_all(t):
     error = None
-    while len(t):
-        th = t.pop()
+    for th in t:
         th.join()
         error = error or th.error
-        if error: continue
-        func(th)
     if error:
         raise error
