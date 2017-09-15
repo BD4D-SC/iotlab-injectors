@@ -174,8 +174,10 @@ def add_options(parser):
 
     parser.add_argument(
         "--max-threads",
+        metavar="<nb>",
         action=MaxThreadsAction,
-        help="use at most specified nb of threads [no limit]")
+        type=int,
+        help="use at most <nb> threads for sending data [no limit]")
 
 
 import argparse
