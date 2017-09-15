@@ -38,8 +38,7 @@ def _run(senders, data_source, duration, ev_per_hour, stats):
 
 def send_next_events(senders, data_source, stats):
     for i, sender in enumerate(senders):
-        event = data_source.get_source(i + data_source.offset).next()
-        sender.send(event)
+        sender.send(data_source, i)
     error = None
     for sender in senders:
         sender.join()
@@ -60,10 +59,11 @@ class EventSender:
         self.gateway = gateway["uuid"]
         self.error = None
 
-    def send(self, event):
+    def send(self, data_source, i):
         def run():
             self.queue.put(True)
             try:
+                event = data_source.get_source(i + data_source.offset).next()
                 self.client.publish(self.gateway, event)
             except Exception as e:
                 self.error = e
