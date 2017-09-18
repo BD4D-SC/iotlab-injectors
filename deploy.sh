@@ -28,7 +28,7 @@ deploy_node() {
 	git clone http://github.com/iot-lab/iotlab-injectors.git
 	cd iotlab-injectors/
 	pip install -r requirements.txt
-	pip install .
+	pip install -e .
 	"
 }
 

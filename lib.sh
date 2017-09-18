@@ -10,6 +10,8 @@ set_params() {
 }
 
 start_experiment() {
+	#exp_id=78653
+	#return 0
 	exp_id=$(experiment-cli submit -d $DURATION \
 		-l $NB_NODES,archi=a8:at86rf231+site=$IOTLAB_SITE \
 		| awk '/"id":/ {print $2}'
@@ -76,6 +78,7 @@ init_nodes() {
 		echo "no booted nodes in experiment $exp_id" && exit 1
 	} >&2
 
+	#nodes=`head -40 <<< "$nodes"`
 	nb_nodes=`wc -l <<< "$nodes"`
 	IOTLAB_SITE=`head -1 <<<"$nodes" | awk -F . '{print $2}'`
 }
