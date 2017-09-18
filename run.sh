@@ -9,6 +9,7 @@ set_params() {
 	EV_PER_HOUR=${3:-3600}
 	PROTOCOL="http"
 	EVENTS="traffic"
+	DATASET="synthetic"
 
 	NB_NODES=$nb_nodes
 }
@@ -22,6 +23,7 @@ run_injectors() {
 		ssh $node injectors --run \
 		--nb-devices $NB_DEVICES \
 		--duration $DURATION \
+		--dataset $DATASET \
 		--events $EVENTS \
 		--ev-per-hour $EV_PER_HOUR \
 		--protocol $PROTOCOL \
