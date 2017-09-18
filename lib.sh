@@ -78,6 +78,7 @@ init_nodes() {
 		echo "no booted nodes in experiment $exp_id" && exit 1
 	} >&2
 
+	#nodes=`head -40 <<< "$nodes"`
 	nb_nodes=`wc -l <<< "$nodes"`
 	IOTLAB_SITE=`head -1 <<<"$nodes" | awk -F . '{print $2}'`
 }
