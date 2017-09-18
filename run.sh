@@ -9,6 +9,7 @@ set_params() {
 	EV_PER_HOUR=${3:-3600}
 	PROTOCOL="http"
 	EVENTS="traffic"
+	DATASET="synthetic"
 
 	NB_NODES=$nb_nodes
 }
@@ -18,14 +19,18 @@ main() {
 }
 
 run_injectors() {
+	i=0
 	for node in $nodes; do
 		ssh $node injectors --run \
 		--nb-devices $NB_DEVICES \
 		--duration $DURATION \
+		--dataset $DATASET \
 		--events $EVENTS \
 		--ev-per-hour $EV_PER_HOUR \
 		--protocol $PROTOCOL \
+		--offset $((i*$NB_DEVICES)) \
 		&
+		i=$((i+1))
 	done
 	for pid in `jobs -p`; do
 		wait $pid
