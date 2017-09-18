@@ -19,6 +19,7 @@ main() {
 }
 
 run_injectors() {
+	i=0
 	for node in $nodes; do
 		ssh $node injectors --run \
 		--nb-devices $NB_DEVICES \
@@ -27,7 +28,9 @@ run_injectors() {
 		--events $EVENTS \
 		--ev-per-hour $EV_PER_HOUR \
 		--protocol $PROTOCOL \
+		--offset $((i*$NB_DEVICES)) \
 		&
+		i=$((i+1))
 	done
 	for pid in `jobs -p`; do
 		wait $pid
