@@ -1,6 +1,7 @@
 import embers.meshblu.subscriber as subscriber
 import embers.injectors.registry as registry
 import embers.injectors.config as config
+import json
 
 from command_parser import Parser
 
@@ -37,7 +38,7 @@ def main():
 
 def on_message(sub, message):
     if sub.opts.print_events:
-        print(message.payload)
+        print(json.dumps(message.payload))
     if sub.opts.print_count:
         print(sub.message_count)
     if sub.opts.exit_after:
