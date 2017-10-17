@@ -32,6 +32,9 @@ def _run(senders, data_source, duration, ev_per_hour, stats):
             sleep_time = 0
         if sleep_time + t2 > end_time:
             sleep_time = end_time - t2 if end_time > t2 else 0
+        stats.send_time += (t2-t1)
+        stats.nb_rounds += 1
+        print("round {} send time: {:.2f}".format(stats.nb_rounds, t2-t1))
         stats.end_time = t2
         time.sleep(sleep_time)
 
