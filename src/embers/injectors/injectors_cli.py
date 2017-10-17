@@ -187,14 +187,10 @@ class InsecureAction(argparse.Action):
         import embers.meshblu.https as https
         https.set_insecure()
 
-        setattr(namespace, self.dest, values)
-
 class UseFiwareAction(argparse.Action):
     def __call__(self, parser, namespace, values, option_string=None):
         import embers.datasets.lib as datasets
         datasets.use_fiware_format = True
-
-        setattr(namespace, self.dest, values)
 
 class MaxThreadsAction(argparse.Action):
     def __call__(self, parser, namespace, values, option_string=None):
