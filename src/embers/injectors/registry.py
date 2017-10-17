@@ -57,16 +57,24 @@ def register_devices(event_type, nb_devices):
     return devices
 
 
+def unregister(uuid, auth):
+    api = get_broker_api()
+    api.auth = (auth["uuid"], auth["token"])
+    api.unregister_device(uuid)
+
+
 def unregister_devices(devices):
+    def _unregister(uuid, auth, res):
+        unregister(uuid, auth)
+
+    apply_to_devices(devices, _unregister)
+
+
+def apply_to_devices(devices, func, collect=lambda res:res):
     # workaround Meshblu rate-limiting using temporary auth devices
     auth = register_devices("unreg_auth", min(10, len(devices)))
     params = [ {"uuid": device["uuid"], "auth": auth[i % len(auth)] }
                for i, device in enumerate(devices) ]
 
-    def unregister(uuid, auth):
-        api = get_broker_api()
-        api.auth = (auth["uuid"], auth["token"])
-        api.unregister_device(uuid)
-
-    parallel_run(params, lambda param, th: unregister(**param))
+    parallel_run(params, lambda param, th: func(res=th, **param), collect)
     parallel_run(auth, lambda x, th: unregister(x["uuid"], x))
