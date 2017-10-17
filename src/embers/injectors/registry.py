@@ -70,6 +70,23 @@ def unregister_devices(devices):
     apply_to_devices(devices, _unregister)
 
 
+def reset(uuid, auth):
+    api = get_broker_api()
+    api.auth = (auth["uuid"], auth["token"])
+    return api.reset_token(uuid)
+
+
+def reset_devices(devices):
+    result = []
+    def collect(res):
+        result.append(res.auth)
+    def _reset(uuid, auth, res):
+        res.auth = reset(uuid, auth)
+
+    apply_to_devices(devices, _reset, collect)
+    return result
+
+
 def apply_to_devices(devices, func, collect=lambda res:res):
     # workaround Meshblu rate-limiting using temporary auth devices
     auth = register_devices("unreg_auth", min(10, len(devices)))
