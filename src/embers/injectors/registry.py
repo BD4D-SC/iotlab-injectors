@@ -89,6 +89,7 @@ def reset_devices(devices):
 
 def apply_to_devices(devices, func, collect=lambda res:res):
     # workaround Meshblu rate-limiting using temporary auth devices
+    # https://meshblu.readme.io/docs/rate-limits
     auth = register_devices("unreg_auth", min(10, len(devices)))
     params = [ {"uuid": device["uuid"], "auth": auth[i % len(auth)] }
                for i, device in enumerate(devices) ]
