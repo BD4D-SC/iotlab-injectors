@@ -2,6 +2,9 @@ from command_parser import Parser, command
 from injectors_cli import EVENTS
 
 import embers.datasets.lib.lookup as datasets
+import embers.datasets.lib.descriptor as desc
+
+import json
 
 
 @command
@@ -23,10 +26,28 @@ def list(**_):
         events = get_supported_events(ds)
         states = get_download_states(ds, events)
         states = "".join(states)
+        nb_dev = get_nb_devices(ds)
         output = ds
         if events: output += " %s" % ":".join(events)
         if states: output += " [%s]" % states
+        if nb_dev: output += " (%s)" % nb_dev
         print(output)
+
+
+@command
+def show_descriptors(dataset, event_type, **_):
+    """ show datasets descriptors """
+
+    d_sets = [ dataset ] if dataset else datasets.get_datasets()
+    events = [ event_type ] if event_type else EVENTS.split()
+
+    for ds in d_sets:
+        for ev in events:
+            try:
+                info = desc.Descriptor("embers.datasets."+ds, ev+".json")
+                print(json.dumps(info.__dict__, indent=True))
+            except:
+                pass
 
 
 def get_supported_events(dataset):
@@ -52,6 +73,15 @@ def get_download_states(dataset, events):
     return states
 
 
+def get_nb_devices(dataset):
+    try:
+        ev = get_supported_events(dataset)[0]
+        info = desc.Descriptor("embers.datasets."+dataset, ev+".json")
+        return info.nb_sensors
+    except:
+        return None
+
+
 def add_parameters(parser):
 
     parser.add_argument(
@@ -63,7 +93,6 @@ def add_parameters(parser):
         "--event-type",
         choices=EVENTS.split(),
         help="dataset type (events) to download")
-
 
 
 def main():
