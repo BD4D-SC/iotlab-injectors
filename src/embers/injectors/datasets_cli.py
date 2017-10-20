@@ -4,6 +4,8 @@ from injectors_cli import EVENTS
 import embers.datasets.lib.lookup as datasets
 import embers.datasets.lib.descriptor as desc
 
+import json
+
 
 @command
 def download(dataset, event_type, **_):
@@ -30,6 +32,22 @@ def list(**_):
         if states: output += " [%s]" % states
         if nb_dev: output += " (%s)" % nb_dev
         print(output)
+
+
+@command
+def show_descriptors(dataset, event_type, **_):
+    """ show datasets descriptors """
+
+    d_sets = [ dataset ] if dataset else datasets.get_datasets()
+    events = [ event_type ] if event_type else EVENTS.split()
+
+    for ds in d_sets:
+        for ev in events:
+            try:
+                info = desc.Descriptor("embers.datasets."+ds, ev+".json")
+                print(json.dumps(info.__dict__, indent=True))
+            except:
+                pass
 
 
 def get_supported_events(dataset):
@@ -75,7 +93,6 @@ def add_parameters(parser):
         "--event-type",
         choices=EVENTS.split(),
         help="dataset type (events) to download")
-
 
 
 def main():
