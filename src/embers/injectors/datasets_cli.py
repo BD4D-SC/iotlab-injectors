@@ -2,6 +2,7 @@ from command_parser import Parser, command
 from injectors_cli import EVENTS
 
 import embers.datasets.lib.lookup as datasets
+import embers.datasets.lib.descriptor as desc
 
 
 @command
@@ -23,9 +24,11 @@ def list(**_):
         events = get_supported_events(ds)
         states = get_download_states(ds, events)
         states = "".join(states)
+        nb_dev = get_nb_devices(ds)
         output = ds
         if events: output += " %s" % ":".join(events)
         if states: output += " [%s]" % states
+        if nb_dev: output += " (%s)" % nb_dev
         print(output)
 
 
@@ -50,6 +53,15 @@ def get_download_states(dataset, events):
             state = ""
         states.append(state)
     return states
+
+
+def get_nb_devices(dataset):
+    try:
+        ev = get_supported_events(dataset)[0]
+        info = desc.Descriptor("embers.datasets."+dataset, ev+".json")
+        return info.nb_sensors
+    except:
+        return None
 
 
 def add_parameters(parser):
