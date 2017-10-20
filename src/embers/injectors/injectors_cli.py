@@ -30,13 +30,16 @@ def main():
 
 @command
 def run(nb_devices, events, dataset, protocol, ev_per_hour, duration,
-        offset, insecure, **_):
+        offset, insecure, reuse_devices, **_):
     """ run <nb> injectors on local node """
 
     print("running {nb} '{}+{}' injector{s} on local node".format(
           events, protocol, nb=nb_devices, s=s(nb_devices)))
 
-    gateway, devices = register_devices(events, nb_devices)
+    if reuse_devices:
+        gateway, devices = lookup_register_devices(events, nb_devices, offset)
+    else:
+        gateway, devices = register_devices(events, nb_devices)
 
     print("sending {} event{s}/h (per injector) for {} min.".format(
           ev_per_hour, duration, s=s(ev_per_hour)))
@@ -52,7 +55,8 @@ def run(nb_devices, events, dataset, protocol, ev_per_hour, duration,
         print("fatal: {}".format(e))
         return 2
     finally:
-        unregister_devices(devices)
+        if not reuse_devices:
+            unregister_devices(devices)
         stats.dump()
 
 
@@ -72,6 +76,17 @@ def unregister_devices(devices):
         registry.unregister_devices(devices)
     except:
         print("failed to unregister devices")
+
+
+def lookup_register_devices(events, nb_devices, offset):
+    devices = registry.lookup_devices(events)
+    devices = devices[offset:offset+nb_devices]
+    devices = registry.reset_devices(devices)
+
+    nb_extra_needed = nb_devices - len(devices)
+    gateway, extra = register_devices(events, nb_devices=nb_extra_needed)
+
+    return gateway, devices+extra
 
 
 @command
@@ -171,6 +186,11 @@ def add_options(parser):
         action=UseFiwareAction,
         nargs=0,
         help="use FiWare data format for payload [%(default)s]")
+
+    parser.add_argument(
+        "--reuse-devices",
+        action='store_true',
+        help="re-use available devices, do not register/unregister")
 
     parser.add_argument(
         "--max-threads",

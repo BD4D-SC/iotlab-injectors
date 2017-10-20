@@ -35,22 +35,26 @@ def list(events, device, gateway, **_):
 
 
 @command
-def register(events, device, **_):
-    """ register specified device """
+def register(events, device, nb_devices, **_):
+    """ register specified device.s """
 
     if not events:
         print("please specify --events <event type>")
         return 1
 
-    if device:
-        ret = registry.register_device(event_type=events)
+    if device or nb_devices is not None:
+        if nb_devices is None: nb_devices = 1
+        ret = registry.register_devices(event_type=events,
+                                        nb_devices=nb_devices)
     else:
         ret = registry.register_gateway(event_type=events)
         if not ret:
             print("gateway already registered")
             return 1
+        ret = [ ret ]
 
-    print("uuid: {}".format(ret["uuid"]))
+    for dev in ret:
+        print("uuid: {}".format(dev["uuid"]))
 
 
 @command
@@ -125,6 +129,11 @@ def add_parameters(parser):
         "--gateway",
         action="store_true",
         help="register a gateway (optional, this is the default)")
+    parser.add_argument(
+        "--nb-devices",
+        type=int,
+        metavar="<nb>",
+        help="register <nb> devices")
 
 
 def main():
