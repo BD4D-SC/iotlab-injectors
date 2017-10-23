@@ -96,15 +96,6 @@ def lookup_register_devices(events, nb_devices, offset):
     return gateway, devices+extra
 
 
-@command
-def deploy(nb_devices, events, **_):
-    """ deploy injectors on <nb> A8 nodes """
-
-    print("deploying {nb} node{s} with '{}' injector{s}".format(
-          events, nb=nb_devices, s=s(nb_devices)))
-    pass
-
-
 def s(nb):
     return "s" if nb != 1 else ""
 
