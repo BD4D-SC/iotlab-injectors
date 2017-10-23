@@ -60,6 +60,13 @@ def run(nb_devices, events, dataset, protocol, ev_per_hour, duration,
         stats.dump()
 
 
+@command
+def init_config(broker, **_):
+    """ initialize config.py (root_auth) """
+    import config
+    config.init_config(broker)
+
+
 def register_devices(events, nb_devices):
     gateway = registry.lookup_gateway(events)
     if not gateway:
@@ -96,13 +103,6 @@ def deploy(nb_devices, events, **_):
     print("deploying {nb} node{s} with '{}' injector{s}".format(
           events, nb=nb_devices, s=s(nb_devices)))
     pass
-
-
-@command
-def init_config(broker, **_):
-    """ initialize config.py (root_auth) """
-    import config
-    config.init_config(broker)
 
 
 def s(nb):
