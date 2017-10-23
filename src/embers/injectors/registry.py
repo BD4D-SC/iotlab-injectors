@@ -2,6 +2,8 @@ from config import get_config
 from config import get_broker_api
 from parallel import parallel_run
 
+import json
+
 
 def GatewayMetadata(event_type):
     return {"type": "gateway", "event_type": str(event_type)}
@@ -85,6 +87,34 @@ def reset_devices(devices):
 
     apply_to_devices(devices, _reset, collect)
     return result
+
+
+FNAME = "devices.{events}.json"
+
+def load_devices(events):
+    with open(FNAME.format(events=events), "a+") as f:
+        return json.loads(f.read() or "[]")
+
+
+def save_devices(events, devices):
+    devices = [ {"uuid":d["uuid"], "token":d["token"]} for d in devices ]
+    with open(FNAME.format(events=events), "w") as f:
+        f.write(json.dumps(devices))
+
+
+def check_devices(devices):
+    result = []
+    def collect(res):
+        result.append(res.dev)
+    def check(dev, res):
+        api = get_broker_api()
+        api.auth = (dev["uuid"], dev["token"])
+        try: api.get_devices({"uuid":dev["uuid"]}) # check auth works
+        except: dev = None
+        res.dev = dev
+
+    parallel_run(devices, check, collect)
+    return [ d for d in devices if d in result ]
 
 
 def apply_to_devices(devices, func, collect=lambda res:res):
