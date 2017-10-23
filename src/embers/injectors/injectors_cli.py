@@ -37,7 +37,7 @@ def run(nb_devices, events, dataset, protocol, ev_per_hour, duration,
           events, protocol, nb=nb_devices, s=s(nb_devices)))
 
     if reuse_devices:
-        gateway, devices = lookup_register_devices(events, nb_devices, offset)
+        gateway, devices = reuse_devices(events, nb_devices, offset)
     else:
         gateway, devices = register_devices(events, nb_devices)
 
@@ -205,10 +205,19 @@ def add_options(parser):
         nargs=0,
         help="use FiWare data format for payload [%(default)s]")
 
-    parser.add_argument(
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument(
         "--reuse-devices",
-        action='store_true',
+        action='store_const',
+        const=lookup_register_devices,
         help="re-use available devices, do not register/unregister")
+
+    group.add_argument(
+        "--file-reuse-devices",
+        action='store_const',
+        const=file_lookup_register_devices,
+        dest="reuse_devices",
+        help="re-use devices listed in local file")
 
     parser.add_argument(
         "--max-threads",
