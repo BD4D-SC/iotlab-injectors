@@ -16,6 +16,7 @@ DEFAULTS = {
     "offset": "0",
     "broker": "127.0.0.1",
     "insecure": False,
+    "fiware": False,
 }
 
 PROTOCOLS = "http mqtt coap https"
@@ -31,7 +32,7 @@ def main():
 @command
 def run(nb_devices, events, dataset, protocol, ev_per_hour, duration,
         offset, insecure, reuse_devices, **_):
-    """ run <nb> injectors on local node """
+    """ run <nb-devices> injectors """
 
     print("running {nb} '{}+{}' injector{s} on local node".format(
           events, protocol, nb=nb_devices, s=s(nb_devices)))
@@ -149,7 +150,7 @@ def add_params(parser):
 
     parser.add_argument(
         "--offset", type=int,
-        metavar="<nb>",
+        metavar="<int>",
         help="offset in dataset for devices  [%(default)s]")
 
     parser.add_argument(
