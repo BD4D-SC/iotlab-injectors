@@ -16,6 +16,7 @@ DEFAULTS = {
     "offset": "0",
     "broker": "127.0.0.1",
     "insecure": False,
+    "fiware": False,
 }
 
 PROTOCOLS = "http mqtt coap https"
