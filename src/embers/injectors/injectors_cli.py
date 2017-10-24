@@ -150,7 +150,7 @@ def add_params(parser):
 
     parser.add_argument(
         "--offset", type=int,
-        metavar="<nb>",
+        metavar="<int>",
         help="offset in dataset for devices  [%(default)s]")
 
     parser.add_argument(
