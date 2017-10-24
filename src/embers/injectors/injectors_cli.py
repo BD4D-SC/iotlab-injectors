@@ -32,7 +32,7 @@ def main():
 @command
 def run(nb_devices, events, dataset, protocol, ev_per_hour, duration,
         offset, insecure, reuse_devices, **_):
-    """ run <nb> injectors on local node """
+    """ run <nb-devices> injectors """
 
     print("running {nb} '{}+{}' injector{s} on local node".format(
           events, protocol, nb=nb_devices, s=s(nb_devices)))
